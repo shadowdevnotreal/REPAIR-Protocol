@@ -49,3 +49,11 @@ This project is released under the terms of the [GNU General Public License v3.0
 
 The REPAIR Protocol platform is intended for personal education and reflection. It does **not** constitute legal advice or professional psychological counseling. Use it responsibly and consult qualified professionals as needed.
 
+
+<p align="center">
+  <img width="357"src="https://github.com/user-attachments/assets/0bdb61c2-fc8c-422a-a991-ef42454f2b1c">
+</p>
+
+<p align="center">
+  All product names, logos, symbols, and related materials are registered trademarks of Diatasso .
+</p>
