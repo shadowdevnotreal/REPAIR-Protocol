@@ -2,10 +2,8 @@
 
 
 <p align="center">
-  <img width="357"src="https://github.com/user-attachments/assets/c44a5e1b-a1da-433f-bebe-7e4fff60d216">
+  <img width="357"src="https://github.com/user-attachments/assets/adecb3af-1818-4cd3-ada6-4f125a4a8a8d">
 </p>
-
-
 
 ### Even an apology needs a roadmap.
 
