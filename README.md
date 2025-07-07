@@ -1,6 +1,13 @@
 # REPAIR Protocol
 
-Even an apology needs a roadmap.
+
+<p align="center">
+  <img width="357"src="https://github.com/user-attachments/assets/c44a5e1b-a1da-433f-bebe-7e4fff60d216">
+</p>
+
+
+
+### Even an apology needs a roadmap.
 
 This project provides an interactive implementation of the **REPAIR Protocol**—a step‑by‑step process for acknowledging harm, planning amends, and rebuilding trust. The single page application (`Index.html`) includes enhanced cognitive tools, progress tracking, and a printable reconciliation contract.
 
