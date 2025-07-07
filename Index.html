@@ -582,6 +582,22 @@
             color: #1e40af;
         }
 
+        .ai-link-highlight {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
         .helper-text {
             font-size: 0.85rem;
             color: #6b7280;
@@ -959,9 +975,22 @@
             { name: 'Contract', icon: 'file-text' }
         ];
 
+        function replaceFeatherIcons() {
+            if (window.feather && typeof window.feather.replace === 'function') {
+                window.feather.replace();
+            } else {
+                document.querySelectorAll('[data-feather="chevron-left"]').forEach(el => {
+                    el.innerHTML = '&larr;';
+                });
+                document.querySelectorAll('[data-feather="chevron-right"]').forEach(el => {
+                    el.innerHTML = '&rarr;';
+                });
+            }
+        }
+
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
-            feather.replace();
+            replaceFeatherIcons();
             renderPhaseContent();
             setupEventListeners();
         });
@@ -1090,8 +1119,8 @@
                 case 7: content.innerHTML = getContractContent(); break;
             }
             
-            // Only replace icons once after content is loaded
-            setTimeout(() => feather.replace(), 100);
+            // Replace icons once after content is loaded
+            setTimeout(replaceFeatherIcons, 100);
             bindFormEvents();
         }
 
@@ -1590,14 +1619,7 @@
                 <!-- Prominent GPT Bot Banner -->
                 <div class="gpt-banner">
                     <h3>🤖 AI Coaching Support Ready!</h3>
-                    <p>After signing, take your contract to our specialized AI coach for personalized guidance</p>
-                    <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot" 
-                       target="_blank" 
-                       class="btn" 
-                       style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-                        <i data-feather="external-link"></i>
-                        Open REPAIR Protocol AI Coach
-                    </a>
+                    <p>After signing, scroll down to open the REPAIR Protocol AI coach for personalized guidance.</p>
                 </div>
 
                 <div class="contract-preview" id="contractPreview">
@@ -1925,28 +1947,28 @@ Generated: ${date}
                 showSignedStatus();
                 showProgressDashboard();
                 showAIIntegration();
-                
+
                 // Update contract preview (regenerate without animation overlay)
                 const contractPreview = document.getElementById('contractPreview');
                 if (contractPreview) {
                     const contractContent = generateContract();
                     contractPreview.innerHTML = contractContent;
                 }
-            }, 8000); // Wait 8 seconds so animation can be enjoyed while content loads
+            }, 10000); // Wait 10 seconds so animation can be enjoyed while content loads
         }
 
         function triggerHeartAnimation() {
             const heartAnimation = document.getElementById('heartAnimation');
             if (heartAnimation) {
                 heartAnimation.classList.add('show');
-                
-                // Hide animation after 12 seconds (longer duration)
+
+                // Hide animation after 15 seconds (longer duration)
                 setTimeout(() => {
                     heartAnimation.style.opacity = '0';
                     setTimeout(() => {
                         heartAnimation.style.display = 'none';
                     }, 500);
-                }, 12000);
+                }, 15000);
             }
         }
 
@@ -1963,7 +1985,7 @@ Generated: ${date}
                     </div>
                 </div>
             `;
-            setTimeout(() => feather.replace(), 100);
+            setTimeout(replaceFeatherIcons, 100);
         }
 
         function showProgressDashboard() {
@@ -2055,9 +2077,9 @@ Generated: ${date}
                             Upload this signed contract to your REPAIR Protocol AI Coach to start your enhanced reconciliation journey with full cognitive support!
                         </p>
                         <div style="text-align: center; margin-top: 1rem;">
-                            <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot" 
-                               target="_blank" 
-                               class="btn btn-primary" 
+                            <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot"
+                               target="_blank"
+                               class="btn btn-primary ai-link-highlight"
                                style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 1rem; padding: 0.75rem 1.5rem;">
                                 <i data-feather="external-link"></i>
                                 Open AI Coach Bot
@@ -2069,7 +2091,7 @@ Generated: ${date}
                     </div>
                 </div>
             `;
-            setTimeout(() => feather.replace(), 100);
+            setTimeout(replaceFeatherIcons, 100);
         }
 
         function downloadContract() {
@@ -2142,7 +2164,7 @@ Generated: ${date}
                 setTimeout(() => {
                     copyBtn.innerHTML = '<i data-feather="copy"></i> Copy';
                     copyBtn.classList.remove('success');
-                    feather.replace();
+                    replaceFeatherIcons();
                 }, 2000);
                 
             } catch (err) {
