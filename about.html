@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced REPAIR Protocol - Visual Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: auto;
+        }
+
+        /* Dynamic Navigation */
+        nav {
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: default;
+        }
+
+        .nav-link.active:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .ai-nav-link {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .ai-nav-link:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .framework-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .phase-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .phase-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .phase-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .cognitive-enhancements {
+            margin-bottom: 20px;
+        }
+
+        .cognitive-enhancements h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .enhancement-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .enhancement-tag {
+            background: #f0f7ff;
+            color: #2563eb;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #dbeafe;
+        }
+
+        .key-processes {
+            margin-bottom: 20px;
+        }
+
+        .key-processes h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .process-list {
+            list-style: none;
+        }
+
+        .process-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .process-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        .metrics {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .metrics h4 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #475569;
+        }
+
+        .metric-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            min-width: 120px;
+            color: #64748b;
+        }
+
+        .metric-visual {
+            flex: 1;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .metric-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .metric-value {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #475569;
+            min-width: 30px;
+        }
+
+        /* Phase-specific colors */
+        .recognize { background: linear-gradient(135deg, #fef3c7, #f59e0b); }
+        .examine { background: linear-gradient(135deg, #ddd6fe, #8b5cf6); }
+        .prepare { background: linear-gradient(135deg, #fecaca, #ef4444); }
+        .articulate { background: linear-gradient(135deg, #bbf7d0, #10b981); }
+        .implement { background: linear-gradient(135deg, #bfdbfe, #3b82f6); }
+        .restore { background: linear-gradient(135deg, #fed7ff, #d946ef); }
+
+        .enhancement-matrix {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .matrix-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th {
+            background: #f8fafc;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .matrix-table td {
+            background: white;
+        }
+
+        .matrix-value {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .value-high { background: #10b981; }
+        .value-medium { background: #f59e0b; }
+        .value-low { background: #6b7280; }
+
+        .activation-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .activation-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .activation-commands {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .command-line {
+            margin-bottom: 5px;
+        }
+
+        .command-prompt {
+            color: #10b981;
+        }
+
+        .expanded-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .expanded-details.show {
+            display: block;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section h5 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .detail-list li {
+            padding: 6px 0;
+            padding-left: 15px;
+            position: relative;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #4b5563;
+        }
+
+        .detail-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .expand-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .expand-btn:hover {
+            background: #4f46e5;
+        }
+
+        @media (max-width: 768px) {
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .matrix-table {
+                font-size: 0.8rem;
+            }
+            
+            .phase-card {
+                padding: 20px;
+            }
+        }
+
+        .emoji {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">
+                <span class="emoji">🏠</span> Home
+            </a>
+            <a href="repair.html" class="nav-link">
+                <span class="emoji">🔧</span> REPAIR Protocol
+            </a>
+            <span class="nav-link active">
+                <span class="emoji">📊</span> Visual Framework
+            </span>
+            <a href="progress.html" class="nav-link">
+                <span class="emoji">📈</span> Progress
+            </a>
+            <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot" 
+               class="nav-link ai-nav-link" 
+               target="_blank"
+               rel="noopener noreferrer">
+                <span class="emoji">🤖</span> AI Coach
+            </a>
+        </div>
+    </nav>
+
+    <div class="framework-container">
+        <div class="header">
+            <h1>Enhanced REPAIR Protocol</h1>
+            <div class="subtitle">Reconciliation & Emotional Process for Apology, Integration, & Restoration</div>
+        </div>
+
+        <div class="workflow">
+            <!-- Phase 1: RECOGNIZE -->
+            <div class="phase-card" onclick="toggleDetails('recognize')">
+                <div class="phase-header">
+                    <div class="phase-number recognize">1</div>
+                    <div>
+                        <div class="phase-title">RECOGNIZE</div>
+                        <div class="phase-subtitle">Comprehensive Awareness & Acknowledgment</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Active Listening (0.9)</span>
+                        <span class="enhancement-tag">Emotional Intelligence (0.9)</span>
+                        <span class="enhancement-tag">Chain of Thought (0.7)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Listen: Complete information gathering</li>
+                        <li>Acknowledge: Verify understanding</li>
+                        <li>Clarify: Address gaps in understanding</li>
+                        <li>Respond: Provide initial recognition</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="recognize-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Enhanced Key Questions</h5>
+                        <ul class="detail-list">
+                            <li>"Help me understand the complete impact of my actions"</li>
+                            <li>"What emotions and thoughts did this create for you?"</li>
+                            <li>"How has this affected your sense of safety/trust/wellbeing?"</li>
+                            <li>"What aspects of the harm am I not yet fully grasping?"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: EXAMINE -->
+            <div class="phase-card" onclick="toggleDetails('examine')">
+                <div class="phase-header">
+                    <div class="phase-number examine">2</div>
+                    <div>
+                        <div class="phase-title">EXAMINE</div>
+                        <div class="phase-subtitle">Logical Analysis & Objective Evaluation</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Chain of Reasoning (0.9)</span>
+                        <span class="enhancement-tag">Bias Mitigation (0.9)</span>
+                        <span class="enhancement-tag">Chain of Thought (0.8)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Logical Analysis: Systematic reasoning</li>
+                        <li>Bias Detection: Objective self-assessment</li>
+                        <li>Impact Assessment: Comprehensive evaluation</li>
+                        <li>Pattern Analysis: Underlying issues</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="examine-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Bias Mitigation Checklist</h5>
+                        <ul class="detail-list">
+                            <li>Minimization bias: "It wasn't that bad"</li>
+                            <li>Intent fallacy: "I didn't mean to hurt anyone"</li>
+                            <li>Comparative bias: "Others have done worse"</li>
+                            <li>Victim blaming: "They're too sensitive"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: PREPARE -->
+            <div class="phase-card" onclick="toggleDetails('prepare')">
+                <div class="phase-header">
+                    <div class="phase-number prepare">3</div>
+                    <div>
+                        <div class="phase-title">PREPARE</div>
+                        <div class="phase-subtitle">Authentic Apology & Restoration Plan</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Wisdom-Understanding (0.9)</span>
+                        <span class="enhancement-tag">Memory Context (0.8)</span>
+                        <span class="enhancement-tag">Emotional Intelligence (0.8)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Wisdom Processing: Intuitive understanding</li>
+                        <li>Understanding Processing: Analytical structure</li>
+                        <li>Synthesis Integration: Combine elements</li>
+                        <li>Memory Integration: Apply learning</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="prepare-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Enhanced Components</h5>
+                        <ul class="detail-list">
+                            <li>Acknowledgment Statement with emotional intelligence</li>
+                            <li>Impact Recognition with wisdom-understanding</li>
+                            <li>Responsibility Acceptance with bias mitigation</li>
+                            <li>Change Commitment with memory context</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4: ARTICULATE -->
+            <div class="phase-card" onclick="toggleDetails('articulate')">
+                <div class="phase-header">
+                    <div class="phase-number articulate">4</div>
+                    <div>
+                        <div class="phase-title">ARTICULATE</div>
+                        <div class="phase-subtitle">Authentic Delivery with Emotional Awareness</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Active Listening (0.9)</span>
+                        <span class="enhancement-tag">Emotional Intelligence (0.9)</span>
+                        <span class="enhancement-tag">Chain of Thought (0.8)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Safe Space Creation: Optimal conditions</li>
+                        <li>Authentic Delivery: Genuine expression</li>
+                        <li>Responsive Communication: Real-time adaptation</li>
+                        <li>Complete Expression: Thorough coverage</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="articulate-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Enhanced Structure</h5>
+                        <ul class="detail-list">
+                            <li>"I acknowledge that I..." - Specific actions</li>
+                            <li>"This caused..." - Impact recognition</li>
+                            <li>"I understand that..." - Deep implications</li>
+                            <li>"I will..." - Specific changes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 5: IMPLEMENT -->
+            <div class="phase-card" onclick="toggleDetails('implement')">
+                <div class="phase-header">
+                    <div class="phase-number implement">5</div>
+                    <div>
+                        <div class="phase-title">IMPLEMENT</div>
+                        <div class="phase-subtitle">Systematic Tracking & Learning Integration</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Memory Context (0.9)</span>
+                        <span class="enhancement-tag">Chain of Reasoning (0.8)</span>
+                        <span class="enhancement-tag">Wisdom-Understanding (0.7)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Immediate Corrections: Urgent changes</li>
+                        <li>Systematic Changes: Comprehensive plan</li>
+                        <li>Progress Tracking: Monitor development</li>
+                        <li>Learning Integration: Sustainable change</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="implement-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Timeline Actions</h5>
+                        <ul class="detail-list">
+                            <li>Immediate (0-2 weeks): Cease harmful behaviors</li>
+                            <li>Short-term (2 weeks - 3 months): Execute amends</li>
+                            <li>Long-term (3+ months): Maintain patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 6: RESTORE -->
+            <div class="phase-card" onclick="toggleDetails('restore')">
+                <div class="phase-header">
+                    <div class="phase-number restore">6</div>
+                    <div>
+                        <div class="phase-title">RESTORE</div>
+                        <div class="phase-subtitle">Rebuild Trust & Restore Relationships</div>
+                    </div>
+                </div>
+
+                <div class="cognitive-enhancements">
+                    <h4>Cognitive Enhancements</h4>
+                    <div class="enhancement-tags">
+                        <span class="enhancement-tag">Wisdom-Understanding (0.9)</span>
+                        <span class="enhancement-tag">Emotional Intelligence (0.9)</span>
+                        <span class="enhancement-tag">Memory Context (0.8)</span>
+                        <span class="enhancement-tag">Active Listening (0.8)</span>
+                    </div>
+                </div>
+
+                <div class="key-processes">
+                    <h4>Key Processes</h4>
+                    <ul class="process-list">
+                        <li>Trust Rebuilding: Systematic confidence restoration</li>
+                        <li>Relationship Healing: Emotional restoration</li>
+                        <li>Pattern Prevention: Sustainable change</li>
+                        <li>Community Restoration: Broader healing</li>
+                    </ul>
+                </div>
+
+                <button class="expand-btn">View Details</button>
+
+                <div id="restore-details" class="expanded-details">
+                    <div class="detail-section">
+                        <h5>Trust Rebuilding Indicators</h5>
+                        <ul class="detail-list">
+                            <li>Consistency between commitments and actions</li>
+                            <li>Transparency in communication</li>
+                            <li>Respect for boundaries</li>
+                            <li>Patience with healing timelines</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhancement Matrix -->
+        <div class="enhancement-matrix">
+            <div class="matrix-title">Cognitive Enhancement Configuration Matrix</div>
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>AL</th>
+                        <th>MC</th>
+                        <th>CoT</th>
+                        <th>CoR</th>
+                        <th>BM</th>
+                        <th>WU</th>
+                        <th>EI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>RECOGNIZE</strong></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>EXAMINE</strong></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PREPARE</strong></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ARTICULATE</strong></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-medium">0.6</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IMPLEMENT</strong></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>RESTORE</strong></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-high">0.8</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-medium">0.7</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                        <td><span class="matrix-value value-high">0.9</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 15px; font-size: 0.9rem; color: #6b7280;">
+                <strong>Legend:</strong> AL = Active Listening, MC = Memory Context, CoT = Chain of Thought, 
+                CoR = Chain of Reasoning, BM = Bias Mitigation, WU = Wisdom-Understanding, EI = Emotional Intelligence
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(phaseId) {
+            const details = document.getElementById(phaseId + '-details');
+            const btn = details.previousElementSibling;
+            
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                btn.textContent = 'View Details';
+            } else {
+                // Hide all other details first
+                const allDetails = document.querySelectorAll('.expanded-details');
+                const allBtns = document.querySelectorAll('.expand-btn');
+                allDetails.forEach(detail => detail.classList.remove('show'));
+                allBtns.forEach(button => button.textContent = 'View Details');
+                
+                // Show current details
+                details.classList.add('show');
+                btn.textContent = 'Hide Details';
+            }
+        }
+
+        // Add some smooth scrolling and animation effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.phase-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

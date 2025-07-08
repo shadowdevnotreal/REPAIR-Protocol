@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced REPAIR Protocol - Digital Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Dynamic Navigation */
+        nav {
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: default;
+        }
+
+        .nav-link.active:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .ai-nav-link {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .ai-nav-link:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Progress Stepper */
+        .progress-stepper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            overflow-x: auto;
+        }
+
+        .stepper-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 800px;
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            min-width: 100px;
+            cursor: pointer;
+        }
+
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .step-circle.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .step-circle.completed {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .step-circle.inactive {
+            background: #f3f4f6;
+            color: #9ca3af;
+            border: 3px solid #e5e7eb;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .step-connector {
+            flex: 1;
+            height: 3px;
+            background: #e5e7eb;
+            margin: 0 1rem;
+            border-radius: 2px;
+            position: relative;
+            top: -15px;
+        }
+
+        .step-connector.completed {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .phase-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phase-subtitle {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Enhancement Box */
+        .enhancement-box {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .enhancement-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4c1d95;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enhancement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .enhancement-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            font-size: 0.9rem;
+        }
+
+        /* Bias Checklist */
+        .bias-checklist {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .bias-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bias-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .bias-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .bias-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #f59e0b;
+        }
+
+        /* Navigation Buttons */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 2px solid #e5e7eb;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            background: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Apology Structure */
+        .apology-structure {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .structure-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .structure-list {
+            list-style: none;
+        }
+
+        .structure-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            font-size: 0.95rem;
+        }
+
+        /* Contract Preview */
+        .contract-preview {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        /* Completion Section */
+        .completion-section {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .completion-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-title {
+            font-size: 2rem;
+            color: #065f46;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .completion-text {
+            font-size: 1.1rem;
+            color: #047857;
+            margin-bottom: 2rem;
+        }
+
+        /* Helper Text */
+        .helper-text {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content-card {
+                padding: 2rem;
+            }
+
+            .stepper-container {
+                min-width: 600px;
+            }
+
+            .step {
+                min-width: 80px;
+            }
+
+            .step-circle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .enhancement-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .emoji {
+            font-style: normal;
+        }
+
+        /* Action Buttons for Contract */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">
+                <span class="emoji">🏠</span> Home
+            </a>
+            <span class="nav-link active">
+                <span class="emoji">🔧</span> REPAIR Protocol
+            </span>
+            <a href="about.html" class="nav-link">
+                <span class="emoji">📊</span> Visual Framework
+            </a>
+            <a href="progress.html" class="nav-link">
+                <span class="emoji">📈</span> Progress
+            </a>
+            <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot" 
+               class="nav-link ai-nav-link" 
+               target="_blank"
+               rel="noopener noreferrer">
+                <span class="emoji">🤖</span> AI Coach
+            </a>
+        </div>
+    </nav>
+
+    <div class="header">
+        <div class="container">
+            <h1>Enhanced REPAIR Protocol</h1>
+            <p>Reconciliation & Emotional Process for Apology, Integration, & Restoration</p>
+            <div style="margin-top: 1rem; font-size: 0.9rem; color: #8b5cf6;">
+                <strong>Enhanced with Cognitive Foundation Components</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Progress Stepper -->
+            <div class="progress-stepper">
+                <div class="stepper-container">
+                    <div class="step" data-phase="0">
+                        <div class="step-circle active" id="step-0">
+                            <span class="emoji">📋</span>
+                        </div>
+                        <div class="step-label">Assessment</div>
+                    </div>
+                    <div class="step-connector" id="connector-0"></div>
+
+                    <div class="step" data-phase="1">
+                        <div class="step-circle inactive" id="step-1">
+                            <span class="emoji">👁️</span>
+                        </div>
+                        <div class="step-label">Recognize</div>
+                    </div>
+                    <div class="step-connector" id="connector-1"></div>
+
+                    <div class="step" data-phase="2">
+                        <div class="step-circle inactive" id="step-2">
+                            <span class="emoji">🔍</span>
+                        </div>
+                        <div class="step-label">Examine</div>
+                    </div>
+                    <div class="step-connector" id="connector-2"></div>
+
+                    <div class="step" data-phase="3">
+                        <div class="step-circle inactive" id="step-3">
+                            <span class="emoji">📝</span>
+                        </div>
+                        <div class="step-label">Prepare</div>
+                    </div>
+                    <div class="step-connector" id="connector-3"></div>
+
+                    <div class="step" data-phase="4">
+                        <div class="step-circle inactive" id="step-4">
+                            <span class="emoji">💬</span>
+                        </div>
+                        <div class="step-label">Articulate</div>
+                    </div>
+                    <div class="step-connector" id="connector-4"></div>
+
+                    <div class="step" data-phase="5">
+                        <div class="step-circle inactive" id="step-5">
+                            <span class="emoji">⚡</span>
+                        </div>
+                        <div class="step-label">Implement</div>
+                    </div>
+                    <div class="step-connector" id="connector-5"></div>
+
+                    <div class="step" data-phase="6">
+                        <div class="step-circle inactive" id="step-6">
+                            <span class="emoji">💚</span>
+                        </div>
+                        <div class="step-label">Restore</div>
+                    </div>
+                    <div class="step-connector" id="connector-6"></div>
+
+                    <div class="step" data-phase="7">
+                        <div class="step-circle inactive" id="step-7">
+                            <span class="emoji">📄</span>
+                        </div>
+                        <div class="step-label">Contract</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase Content -->
+            <div class="content-card" id="phase-content">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let currentPhase = 0;
+        let formData = {
+            harmDescription: '',
+            affectedParty: '',
+            harmSeverity: '',
+            readiness: '',
+            specificActions: '',
+            responsibility: '',
+            emotionalImpact: '',
+            directImpacts: '',
+            secondaryEffects: '',
+            systemicImplications: '',
+            acknowledgmentStatement: '',
+            changeCommitment: '',
+            amendsProposal: '',
+            timeline: '',
+            apologyText: '',
+            immediateActions: '',
+            longTermChanges: '',
+            progressCheckins: '',
+            trustMetrics: '',
+            healingIndicators: '',
+            biasChecklist: {},
+            apologizerSignature: '',
+            affectedPartySignature: '',
+            signatureDate: ''
+        };
+
+        const phases = [
+            { name: 'Assessment', icon: '📋' },
+            { name: 'Recognize', icon: '👁️' },
+            { name: 'Examine', icon: '🔍' },
+            { name: 'Prepare', icon: '📝' },
+            { name: 'Articulate', icon: '💬' },
+            { name: 'Implement', icon: '⚡' },
+            { name: 'Restore', icon: '💚' },
+            { name: 'Contract', icon: '📄' }
+        ];
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPhaseContent();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Phase navigation
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.addEventListener('click', () => goToPhase(index));
+            });
+        }
+
+        function saveFormData() {
+            // Save to memory (localStorage removed per requirements)
+        }
+
+        function updateFormData(field, value) {
+            formData[field] = value;
+            saveFormData();
+        }
+
+        function goToPhase(phaseIndex) {
+            if (phaseIndex >= 0 && phaseIndex < phases.length) {
+                currentPhase = phaseIndex;
+                updateStepperUI();
+                renderPhaseContent();
+            }
+        }
+
+        function nextPhase() {
+            if (currentPhase < phases.length - 1) {
+                currentPhase++;
+                updateStepperUI();
+                renderPhaseContent();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevPhase() {
+            if (currentPhase > 0) {
+                currentPhase--;
+                updateStepperUI();
+                renderPhaseContent();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateStepperUI() {
+            phases.forEach((phase, index) => {
+                const stepCircle = document.getElementById(`step-${index}`);
+                const connector = document.getElementById(`connector-${index}`);
+
+                stepCircle.className = 'step-circle';
+                if (index < currentPhase) {
+                    stepCircle.classList.add('completed');
+                    stepCircle.innerHTML = '<span class="emoji">✓</span>';
+                    if (connector) connector.classList.add('completed');
+                } else if (index === currentPhase) {
+                    stepCircle.classList.add('active');
+                    stepCircle.innerHTML = `<span class="emoji">${phase.icon}</span>`;
+                } else {
+                    stepCircle.classList.add('inactive');
+                    stepCircle.innerHTML = `<span class="emoji">${phase.icon}</span>`;
+                    if (connector) connector.classList.remove('completed');
+                }
+            });
+        }
+
+        function renderPhaseContent() {
+            const content = document.getElementById('phase-content');
+            content.className = 'content-card';
+
+            switch(currentPhase) {
+                case 0: content.innerHTML = getAssessmentContent(); break;
+                case 1: content.innerHTML = getRecognizeContent(); break;
+                case 2: content.innerHTML = getExamineContent(); break;
+                case 3: content.innerHTML = getPrepareContent(); break;
+                case 4: content.innerHTML = getArticulateContent(); break;
+                case 5: content.innerHTML = getImplementContent(); break;
+                case 6: content.innerHTML = getRestoreContent(); break;
+                case 7: content.innerHTML = getContractContent(); break;
+            }
+
+            bindFormEvents();
+        }
+
+        function bindFormEvents() {
+            // Bind all form inputs
+            document.querySelectorAll('input, textarea, select').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    updateFormData(e.target.name, e.target.value);
+                });
+
+                // Set current values
+                if (formData[input.name] !== undefined) {
+                    input.value = formData[input.name];
+                }
+            });
+
+            // Bind checkboxes
+            document.querySelectorAll('.bias-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    formData.biasChecklist[e.target.name] = e.target.checked;
+                    saveFormData();
+                });
+                
+                // Set current state
+                if (formData.biasChecklist[checkbox.name]) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+        function getNavigationButtons() {
+            return `
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="prevPhase()" ${currentPhase === 0 ? 'disabled' : ''}>
+                        <span class="emoji">←</span> Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="nextPhase()" ${currentPhase === phases.length - 1 ? 'disabled' : ''}>
+                        Next <span class="emoji">→</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function getAssessmentContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">📋</span>
+                    Initial Assessment
+                </div>
+                <div class="phase-subtitle">
+                    Let's begin by understanding the situation and your readiness for this enhanced reconciliation process.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">🧠</span>
+                        Cognitive Enhancement Framework Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Active Listening (0.9):</strong> Complete information gathering
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Emotional Intelligence (0.9):</strong> Emotional awareness and context
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Memory Context (0.6):</strong> Learning integration foundation
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Bias Mitigation (0.6):</strong> Objective assessment preparation
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Describe the harm that occurred:</label>
+                    <textarea class="form-textarea" name="harmDescription" placeholder="What happened that caused harm? Be specific and comprehensive..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Who was affected?</label>
+                    <input type="text" class="form-input" name="affectedParty" placeholder="Name or description of affected party">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">How would you rate the severity of harm?</label>
+                    <select class="form-select" name="harmSeverity">
+                        <option value="">Select severity level</option>
+                        <option value="mild">Mild - Minor impact, easily addressed</option>
+                        <option value="moderate">Moderate - Significant impact, requires effort</option>
+                        <option value="severe">Severe - Major impact, substantial work needed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">How ready are you to engage in this enhanced process?</label>
+                    <select class="form-select" name="readiness">
+                        <option value="">Select readiness level</option>
+                        <option value="fully">Fully ready - Committed to complete cognitive enhancement process</option>
+                        <option value="mostly">Mostly ready - Some concerns but willing to engage</option>
+                        <option value="somewhat">Somewhat ready - Need more consideration and support</option>
+                    </select>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getRecognizeContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">👁️</span>
+                    Phase 1: RECOGNIZE
+                </div>
+                <div class="phase-subtitle">
+                    Acknowledge harm and establish comprehensive awareness through enhanced cognitive processing.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">🧠</span>
+                        Enhanced Recognition Protocol Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Active Listening (0.9):</strong> Complete information gathering about impact
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Emotional Intelligence (0.9):</strong> Recognition of emotional states and contexts
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Chain of Thought (0.7):</strong> Structured analysis of actions and consequences
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bias-checklist">
+                    <div class="bias-title">
+                        <span class="emoji">🛡️</span>
+                        Bias Mitigation Checklist
+                    </div>
+                    <div class="bias-item">
+                        <input type="checkbox" class="bias-checkbox" name="minimization" id="minimization">
+                        <label for="minimization">I understand the minimization bias: "It wasn't that bad"</label>
+                    </div>
+                    <div class="bias-item">
+                        <input type="checkbox" class="bias-checkbox" name="intent" id="intent">
+                        <label for="intent">I understand the intent fallacy: "I didn't mean to hurt anyone"</label>
+                    </div>
+                    <div class="bias-item">
+                        <input type="checkbox" class="bias-checkbox" name="comparative" id="comparative">
+                        <label for="comparative">I understand the comparative bias: "Others have done worse"</label>
+                    </div>
+                    <div class="bias-item">
+                        <input type="checkbox" class="bias-checkbox" name="victim_blaming" id="victim_blaming">
+                        <label for="victim_blaming">I understand victim blaming: "They're too sensitive"</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">What specific actions or inactions caused harm?</label>
+                    <textarea class="form-textarea" name="specificActions" placeholder="Be specific about what you did or didn't do..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">How do you accept responsibility for these actions?</label>
+                    <textarea class="form-textarea" name="responsibility" placeholder="Express your acceptance of responsibility without deflection..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">What emotional impact did your behavior have?</label>
+                    <textarea class="form-textarea" name="emotionalImpact" placeholder="Describe the emotional impact on the affected party..."></textarea>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getExamineContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">🔍</span>
+                    Phase 2: EXAMINE
+                </div>
+                <div class="phase-subtitle">
+                    Deep understanding of the full scope of impact through logical analysis.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">🧠</span>
+                        Enhanced Analysis Protocol Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Chain of Reasoning (0.9):</strong> Logical analysis of causation
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Bias Mitigation (0.9):</strong> Objective assessment
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Chain of Thought (0.8):</strong> Structured examination
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Direct impacts on the affected party:</label>
+                    <textarea class="form-textarea" name="directImpacts" placeholder="What were the immediate and direct consequences?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Secondary effects on relationships:</label>
+                    <textarea class="form-textarea" name="secondaryEffects" placeholder="How did this affect others in your shared circles?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Systemic implications:</label>
+                    <textarea class="form-textarea" name="systemicImplications" placeholder="What patterns or larger issues does this reveal?"></textarea>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getPrepareContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">📝</span>
+                    Phase 3: PREPARE
+                </div>
+                <div class="phase-subtitle">
+                    Formulate your authentic apology and restoration plan.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">💭</span>
+                        Enhanced Preparation Protocol Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Wisdom-Understanding (0.9):</strong> Balanced approach
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Memory Context (0.8):</strong> Learning integration
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Emotional Intelligence (0.8):</strong> Appropriate response
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Clear acknowledgment statement:</label>
+                    <textarea class="form-textarea" name="acknowledgmentStatement" placeholder="I acknowledge that I..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Commitment to change:</label>
+                    <textarea class="form-textarea" name="changeCommitment" placeholder="What specific changes will you make?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Specific amends proposal:</label>
+                    <textarea class="form-textarea" name="amendsProposal" placeholder="What concrete actions will you take to make amends?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Implementation timeline:</label>
+                    <textarea class="form-textarea" name="timeline" placeholder="When will you complete these actions?"></textarea>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getArticulateContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">💬</span>
+                    Phase 4: ARTICULATE
+                </div>
+                <div class="phase-subtitle">
+                    Craft your complete, authentic apology with emotional awareness.
+                </div>
+
+                <div class="apology-structure">
+                    <div class="structure-title">
+                        <span class="emoji">📋</span>
+                        Enhanced Apology Structure
+                    </div>
+                    <ul class="structure-list">
+                        <li class="structure-item">1. "I acknowledge that I..." (Specific Actions)</li>
+                        <li class="structure-item">2. "This caused..." (Impact Recognition)</li>
+                        <li class="structure-item">3. "I understand that..." (Deep Implications)</li>
+                        <li class="structure-item">4. "I will..." (Specific Changes)</li>
+                        <li class="structure-item">5. "To make amends..." (Restoration Proposals)</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Your complete enhanced apology:</label>
+                    <textarea class="form-textarea" name="apologyText" rows="10" placeholder="Write your complete apology following the structure above..."></textarea>
+                </div>
+
+                <div class="helper-text">
+                    <strong>Delivery Requirements:</strong> Create safe space, maintain authentic delivery, apply responsive communication, and ensure complete expression.
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getImplementContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">⚡</span>
+                    Phase 5: IMPLEMENT
+                </div>
+                <div class="phase-subtitle">
+                    Execute comprehensive restoration plan with systematic tracking.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">📅</span>
+                        Implementation Protocol Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Memory Context (0.9):</strong> Learning integration
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Chain of Reasoning (0.8):</strong> Logical implementation
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Wisdom-Understanding (0.7):</strong> Balanced approach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Immediate actions (0-2 weeks):</label>
+                    <textarea class="form-textarea" name="immediateActions" placeholder="What will you do immediately?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Long-term changes (3+ months):</label>
+                    <textarea class="form-textarea" name="longTermChanges" placeholder="What sustainable changes will you maintain?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Progress check-in schedule:</label>
+                    <textarea class="form-textarea" name="progressCheckins" placeholder="When and how will you check progress?"></textarea>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getRestoreContent() {
+            return `
+                <div class="phase-title">
+                    <span class="emoji">💚</span>
+                    Phase 6: RESTORE
+                </div>
+                <div class="phase-subtitle">
+                    Rebuild trust and restore relationships through consistent action.
+                </div>
+
+                <div class="enhancement-box">
+                    <div class="enhancement-title">
+                        <span class="emoji">🌱</span>
+                        Restoration Protocol Active
+                    </div>
+                    <div class="enhancement-grid">
+                        <div class="enhancement-item">
+                            <strong>Wisdom-Understanding (0.9):</strong> Patient rebuilding
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Emotional Intelligence (0.9):</strong> Relationship healing
+                        </div>
+                        <div class="enhancement-item">
+                            <strong>Active Listening (0.8):</strong> Ongoing dialogue
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Trust rebuilding metrics:</label>
+                    <textarea class="form-textarea" name="trustMetrics" placeholder="How will you measure trust restoration?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Healing indicators:</label>
+                    <textarea class="form-textarea" name="healingIndicators" placeholder="What signs will show relationship healing?"></textarea>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function getContractContent() {
+            const contractText = generateContract();
+            
+            return `
+                <div class="phase-title" style="text-align: center;">
+                    <span class="emoji">📄</span>
+                    Enhanced Contract & Progress Tracking
+                </div>
+                <div class="phase-subtitle" style="text-align: center;">
+                    Review, sign, and set up comprehensive tracking for your Enhanced REPAIR Protocol agreement.
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; padding: 30px; margin: 30px 0; text-align: center; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 15px;">
+                        <span class="emoji">🤖</span> AI Coaching Support Ready!
+                    </div>
+                    <p style="color: rgba(255,255,255,0.95); font-size: 1.1rem; line-height: 1.6;">
+                        After signing, scroll down to open the REPAIR Protocol AI coach for personalized guidance.
+                    </p>
+                </div>
+
+                <div class="contract-preview" id="contractPreviewDiv" style="position: relative;">
+                    ${contractText}
+                    <div id="repairHeartAnimation" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; pointer-events: none;">
+                        <img src="https://github.com/user-attachments/assets/0bdb61c2-fc8c-422a-a991-ef42454f2b1c" 
+                             alt="REPAIR BOT" 
+                             style="width: 300px; height: auto;">
+                    </div>
+                </div>
+                
+                <!-- Signature Section -->
+                <div style="background: white; border-radius: 12px; padding: 30px; margin: 30px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
+                            <label style="font-size: 1rem; color: #374151; margin-bottom: 10px; font-weight: 600; display: block;">Apologizer Signature:</label>
+                            <input type="text" id="repairSignature1" placeholder="Type your full name" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; background: white;">
+                        </div>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
+                            <label style="font-size: 1rem; color: #374151; margin-bottom: 10px; font-weight: 600; display: block;">Affected Party Signature:</label>
+                            <input type="text" id="repairSignature2" placeholder="Affected party's full name" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; background: white;">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="signRepairButton" onclick="signRepairContract()" style="width: 100%; padding: 16px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span class="emoji">✓</span>
+                        Sign Enhanced Agreement
+                    </button>
+                </div>
+
+                <div class="action-buttons" id="repairActionButtons" style="display: none;">
+                    <button class="btn-download" onclick="downloadContract()">
+                        <span class="emoji">📥</span> Download
+                    </button>
+                    <button class="btn-download" onclick="copyContract()" style="background: #6b7280;">
+                        <span class="emoji">📋</span> Copy
+                    </button>
+                    <button class="btn-download" onclick="viewRepairContract()" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                        <span class="emoji">👁️</span> View
+                    </button>
+                    <button class="btn-download" onclick="printContract()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <span class="emoji">🖨️</span> Print
+                    </button>
+                </div>
+                
+                <div style="background: #f3f4f6; border-radius: 12px; padding: 20px; margin-top: 20px; border: 1px solid #e5e7eb;">
+                    <p style="font-size: 0.95rem; color: #4b5563; margin: 0;">
+                        <strong>Export Options:</strong> Download works outside Claude.ai • Copy works everywhere • View shows modal preview • Print opens browser print/save as PDF
+                    </p>
+                </div>
+
+                <div class="completion-section">
+                    <div class="completion-icon emoji">🎉</div>
+                    <h2 class="completion-title">Protocol Complete!</h2>
+                    <p class="completion-text">
+                        You've completed the Enhanced REPAIR Protocol. Your journey of reconciliation continues with implementation and ongoing support.
+                    </p>
+                    <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot" 
+                       class="btn-download" 
+                       target="_blank"
+                       style="max-width: 300px; margin: 0 auto;">
+                        <span class="emoji">🤖</span> Continue with AI Coach
+                    </a>
+                </div>
+
+                ${getNavigationButtons()}
+            `;
+        }
+
+        function generateContract() {
+            const date = new Date().toLocaleDateString();
+            const harmSeverityLevel = formData.harmSeverity ? formData.harmSeverity.charAt(0).toUpperCase() + formData.harmSeverity.slice(1) : 'Not assessed';
+            
+            return `ENHANCED REPAIR PROTOCOL RECONCILIATION AGREEMENT
+Reconciliation & Emotional Process for Apology, Integration, & Restoration
+Enhanced with Cognitive Foundation Components
+
+================================================================================
+CONTRACT METADATA
+================================================================================
+Date: ${date}
+Parties: ${formData.apologizerSignature || '[Apologizer]'} and ${formData.affectedParty || '[Affected Party]'}
+Severity Level: ${harmSeverityLevel}
+Readiness Assessment: ${formData.readiness || 'Not assessed'}
+Framework Version: Enhanced REPAIR Protocol v2.0
+
+================================================================================
+COGNITIVE ENHANCEMENT CONFIGURATION
+================================================================================
+This agreement incorporates advanced cognitive processing for enhanced effectiveness:
+
+Active Listening (AL): High priority in RECOGNIZE and ARTICULATE phases
+Memory Context (MC): Integrated throughout for learning retention and pattern recognition
+Chain of Thought (CoT): Applied for structured analysis and communication
+Chain of Reasoning (CoR): Enhanced logical analysis in EXAMINE phase
+Bias Mitigation (BM): Systematic objectivity checks throughout process
+Wisdom-Understanding (WU): Balanced intuitive and analytical approach
+Emotional Intelligence (EI): High-level emotional awareness and regulation
+
+Performance Target Metrics (0.0-1.0 scale):
+- Information Completeness: Target 0.8+
+- Emotional Recognition Accuracy: Target 0.8+
+- Logical Consistency: Target 0.9+
+- Bias Detection Effectiveness: Target 0.8+
+- Implementation Consistency: Target 0.9+
+- Trust Restoration Progress: Target 0.7+
+
+================================================================================
+PHASE 1: RECOGNIZE - ENHANCED ACKNOWLEDGMENT
+================================================================================
+
+HARM DESCRIPTION:
+${formData.harmDescription || 'Not specified'}
+
+SPECIFIC ACTIONS THAT CAUSED HARM:
+${formData.specificActions || 'Not specified'}
+
+RESPONSIBILITY ACCEPTANCE:
+${formData.responsibility || 'Not specified'}
+
+EMOTIONAL IMPACT RECOGNITION:
+${formData.emotionalImpact || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR RECOGNIZE PHASE:
+- Apply Active Listening (Level 0.9) to fully understand all impacts
+- Use Emotional Intelligence (Level 0.9) to recognize and validate feelings
+- Complete bias mitigation checklist for defensive thinking
+- Achieve minimum 0.8 performance score on acknowledgment authenticity
+
+BIAS MITIGATION CHECKLIST COMPLETION REQUIRED:
+□ Minimization bias: "It wasn't that bad"
+□ Intent fallacy: "I didn't mean to hurt anyone" 
+□ Comparative bias: "Others have done worse"
+□ Victim blaming: "They're too sensitive"
+□ Self-pity bias: "I'm the real victim here"
+□ Perfectionism bias: "I never do anything right"
+
+================================================================================
+PHASE 2: EXAMINE - ENHANCED ANALYSIS
+================================================================================
+
+DIRECT IMPACTS IDENTIFIED:
+${formData.directImpacts || 'Not specified'}
+
+SECONDARY EFFECTS ON COMMUNITY:
+${formData.secondaryEffects || 'Not specified'}
+
+SYSTEMIC IMPLICATIONS:
+${formData.systemicImplications || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR EXAMINE PHASE:
+- Apply Chain of Reasoning (Level 0.9) for logical impact analysis
+- Use Bias Mitigation (Level 0.9) to ensure objective self-assessment
+- Complete pattern analysis for recurring behaviors
+- Achieve minimum 0.8 performance score on impact assessment completeness
+
+REQUIRED ANALYSIS COMPONENTS:
+- Immediate harm assessment with logical causation mapping
+- Ripple effect analysis on relationships and community
+- Trust damage evaluation with safety implications
+- Personal pattern identification with root cause analysis
+
+================================================================================
+PHASE 3: PREPARE - ENHANCED PLANNING
+================================================================================
+
+ACKNOWLEDGMENT STATEMENT:
+${formData.acknowledgmentStatement || 'Not specified'}
+
+COMMITMENT TO CHANGE:
+${formData.changeCommitment || 'Not specified'}
+
+SPECIFIC AMENDS PROPOSAL:
+${formData.amendsProposal || 'Not specified'}
+
+IMPLEMENTATION TIMELINE:
+${formData.timeline || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR PREPARE PHASE:
+- Apply Wisdom-Understanding (Level 0.9) for balanced approach
+- Use Memory Context (Level 0.8) to integrate past learning
+- Employ Emotional Intelligence (Level 0.8) for appropriate response design
+- Achieve minimum 0.8 performance score on authenticity and comprehensiveness
+
+REQUIRED PREPARATION COMPONENTS:
+- Wisdom Processing: Connect with genuine remorse and empathy
+- Understanding Processing: Organize systematic apology structure
+- Synthesis Integration: Balance emotional authenticity with practical commitments
+- Memory Integration: Apply learning from past experiences
+
+================================================================================
+PHASE 4: ARTICULATE - ENHANCED COMMUNICATION
+================================================================================
+
+COMPLETE APOLOGY TEXT:
+${formData.apologyText || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR ARTICULATE PHASE:
+- Apply Active Listening (Level 0.9) during delivery for responsive communication
+- Use Emotional Intelligence (Level 0.9) to read and respond to emotional cues
+- Employ Chain of Thought (Level 0.8) for clear, organized presentation
+- Achieve minimum 0.8 performance score on delivery authenticity
+
+REQUIRED COMMUNICATION STRUCTURE:
+1. "I acknowledge that I..." (Specific Actions with Emotional Awareness)
+2. "This caused..." (Comprehensive Impact Recognition)
+3. "I understand that..." (Deep Implications with Wisdom Integration)
+4. "I will..." (Specific Changes with Memory Context)
+5. "To make amends..." (Meaningful Restoration Proposals)
+
+DELIVERY REQUIREMENTS:
+- Safe space creation with emotional safety protocols
+- Authentic delivery with genuine presence and emotion
+- Responsive communication with real-time feedback adjustment
+- Complete expression covering all prepared elements
+
+================================================================================
+PHASE 5: IMPLEMENT - ENHANCED ACTION
+================================================================================
+
+IMMEDIATE CORRECTIVE ACTIONS (0-2 weeks):
+${formData.immediateActions || 'Not specified'}
+
+LONG-TERM SYSTEMIC CHANGES (2+ weeks):
+${formData.longTermChanges || 'Not specified'}
+
+PROGRESS CHECK-IN SCHEDULE:
+${formData.progressCheckins || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR IMPLEMENT PHASE:
+- Apply Memory Context (Level 0.9) for learning integration and pattern tracking
+- Use Chain of Reasoning (Level 0.8) for logical implementation and adjustment
+- Employ systematic progress tracking with documented metrics
+- Achieve minimum 0.9 performance score on implementation consistency
+
+MEMORY CONTEXT INTEGRATION SCHEDULE:
+- 24 hours: Review and reinforcement of key commitments
+- 3 days: Pattern application practice and initial habit formation
+- 1 week: Integration assessment and progress evaluation
+- 2 weeks: Adjustment and refinement of approach
+- 1 month: Long-term retention check and sustainability assessment
+
+REQUIRED IMPLEMENTATION ACTIONS:
+□ Immediate cessation of harmful behaviors
+□ Safety measure implementation where needed
+□ Communication and transparency practice initiation
+□ Documentation and accountability system activation
+□ Professional help engagement if specified
+
+================================================================================
+PHASE 6: RESTORE - ENHANCED RELATIONSHIP HEALING
+================================================================================
+
+TRUST REBUILDING METRICS:
+${formData.trustMetrics || 'Not specified'}
+
+RELATIONSHIP HEALING INDICATORS:
+${formData.healingIndicators || 'Not specified'}
+
+COGNITIVE ENHANCEMENT COMMITMENTS FOR RESTORE PHASE:
+- Apply Wisdom-Understanding (Level 0.9) for balanced approach to healing
+- Use Emotional Intelligence (Level 0.9) to navigate complex emotional dynamics
+- Employ Memory Context (Level 0.8) for learning from healing process
+- Achieve minimum 0.7 performance score on trust restoration progress
+
+REQUIRED RESTORATION COMPONENTS:
+- Trust Rebuilding: Demonstrate consistency between words and actions
+- Relationship Healing: Navigate complex emotional restoration with patience
+- Pattern Prevention: Maintain sustainable change and growth systems
+- Community Restoration: Contribute to broader healing and education
+
+LONG-TERM SUSTAINABILITY METRICS:
+- Consistency between commitments and actions (Target: 0.9+)
+- Transparency in communication and decision-making (Target: 0.8+)
+- Respect for boundaries and agreements (Target: 0.9+)
+- Demonstration of genuine change over time (Target: 0.8+)
+
+================================================================================
+PERFORMANCE TRACKING FRAMEWORK
+================================================================================
+
+COGNITIVE ENHANCEMENT EFFECTIVENESS TRACKING:
+Each phase will be evaluated using the following metrics (0.0-1.0 scale):
+
+RECOGNIZE Phase Metrics:
+- Information completeness score
+- Emotional recognition accuracy
+- Acknowledgment authenticity rating
+- Safe space establishment effectiveness
+
+EXAMINE Phase Metrics:
+- Logical consistency score
+- Bias detection accuracy
+- Impact assessment completeness
+- Pattern recognition quality
+
+PREPARE Phase Metrics:
+- Authenticity assessment
+- Comprehensiveness rating
+- Specificity and actionability score
+- Emotional appropriateness
+
+ARTICULATE Phase Metrics:
+- Delivery authenticity
+- Emotional appropriateness
+- Responsiveness to feedback
+- Completeness of communication
+
+IMPLEMENT Phase Metrics:
+- Implementation consistency
+- Behavior change sustainability
+- Learning integration effectiveness
+- Accountability engagement quality
+
+RESTORE Phase Metrics:
+- Trust restoration rate
+- Relationship quality improvement
+- Pattern prevention effectiveness
+- Community healing contribution
+
+================================================================================
+QUALITY ASSURANCE PROTOCOLS
+================================================================================
+
+CONTINUOUS MONITORING REQUIREMENTS:
+- Real-time adjustment of cognitive enhancement levels based on effectiveness
+- Regular check-ins with all parties using structured assessment tools
+- Progress measurement against established metrics with documented evidence
+- Early warning system activation for process breakdown indicators
+- Support system engagement when performance falls below target thresholds
+
+VALIDATION CHECKPOINTS:
+□ Phase completion verification with quality assessment
+□ Stakeholder satisfaction evaluation using standardized measures
+□ Objective third-party review when requested or indicated
+□ Long-term sustainability assessment at 3, 6, and 12 month intervals
+□ Community impact evaluation for broader healing contribution
+
+CRISIS MANAGEMENT INTEGRATION:
+If severe distress, safety concerns, or process breakdown occurs:
+- Prioritize safety over process completion speed
+- Engage professional mental health support coordination
+- Implement safety planning and risk assessment protocols
+- Activate community intervention and support systems
+- Document concerns for professional follow-up and learning
+
+================================================================================
+ADAPTIVE CONFIGURATION SETTINGS
+================================================================================
+
+CULTURAL ADAPTATION PROTOCOL:
+This agreement acknowledges and accommodates:
+- Cultural communication patterns and expectations
+- Power dynamics and hierarchical considerations
+- Religious or spiritual integration where relevant
+- Community healing traditions and practices
+- Language and accessibility accommodations
+
+PROFESSIONAL RESOURCE INTEGRATION:
+This process may integrate with:
+- Mental health support coordination for emotional processing
+- Legal consultation where appropriate for serious matters
+- Safety planning and risk assessment for complex situations
+- Community intervention and support for broader healing
+- Long-term therapeutic integration for sustained growth
+
+================================================================================
+COMMITMENT AND SIGNATURES
+================================================================================
+
+APOLOGIZER COMMITMENT:
+"I, ${formData.apologizerSignature || '[Apologizer Name]'}, commit to engaging fully with this Enhanced REPAIR Protocol process. I understand that this involves not only completing the agreed actions but also applying advanced cognitive enhancement techniques for deeper understanding, more effective communication, and lasting change. I commit to the performance targets outlined above and to continuous improvement throughout this journey."
+
+AFFECTED PARTY ACKNOWLEDGMENT:
+"I, ${formData.affectedPartySignature || '[Affected Party Name]'}, acknowledge this comprehensive commitment to reconciliation and healing. I understand the enhanced framework being applied and commit to engaging with this process in good faith, while maintaining my right to adjust timelines and boundaries as needed for my own healing and safety."
+
+SHARED COMMITMENT:
+"We both agree to approach this Enhanced REPAIR Protocol with patience, authenticity, and commitment to genuine healing and restoration. We understand that this process is designed to create lasting positive change through advanced cognitive processing and emotional intelligence application."
+
+SIGNATURES:
+Apologizer: ${formData.apologizerSignature || '[Signature Required]'}
+Date: ${formData.signatureDate || '[Date Required]'}
+
+Affected Party: ${formData.affectedPartySignature || '[Signature Required]'}
+Date: ${formData.signatureDate || '[Date Required]'}
+
+================================================================================
+AI SUPPORT COACHING INFORMATION
+================================================================================
+
+🤖 PERSONALIZED AI SUPPORT AVAILABLE
+
+Congratulations on completing your Enhanced REPAIR Protocol contract! You now have access to specialized AI coaching designed specifically for this framework.
+
+Your AI coach will:
+✅ Track your progress against these specific commitments
+✅ Guide you through cognitive enhancement exercises
+✅ Provide accountability and emotional support
+✅ Generate performance reports using the metrics above
+✅ Help you navigate challenges with bias mitigation techniques
+✅ Support memory context integration for lasting change
+
+TO BEGIN AI COACHING:
+1. Upload this signed contract to your REPAIR Protocol AI Coach
+2. Complete the initial cognitive enhancement assessment
+3. Begin your guided journey with personalized daily support
+
+Your AI coach uses the same enhanced cognitive framework outlined in this contract, ensuring consistent, effective support throughout your reconciliation journey.
+
+Remember: Healing takes time, and every step forward matters. You've shown courage by signing this enhanced contract - your AI coach will help you succeed! 🌱
+
+================================================================================
+END OF ENHANCED REPAIR PROTOCOL CONTRACT
+================================================================================
+
+This Enhanced REPAIR Protocol Contract represents a comprehensive commitment to healing, growth, and reconciliation using advanced cognitive processing techniques for maximum effectiveness and sustainability.
+
+Framework Version: Enhanced REPAIR Protocol v2.0 with Cognitive Foundation Integration
+Generated by: REPAIR Protocol Digital Platform
+Date: ${date}`;
+        }
+
+        function downloadContract() {
+            const contractText = generateContract();
+            const blob = new Blob([contractText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Enhanced_REPAIR_Contract_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function copyContract() {
+            const contractText = generateContract();
+            navigator.clipboard.writeText(contractText).then(() => {
+                alert('Contract copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = contractText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Contract copied to clipboard!');
+            });
+        }
+        
+        function signRepairContract() {
+            const sig1 = document.getElementById('repairSignature1')?.value || '';
+            const sig2 = document.getElementById('repairSignature2')?.value || '';
+            
+            if (!sig1 || !sig2) {
+                alert('Please enter both signatures');
+                return;
+            }
+            
+            // Update form data with signatures
+            formData.apologizerSignature = sig1;
+            formData.affectedPartySignature = sig2;
+            formData.signatureDate = new Date().toLocaleString();
+            
+            // Get contract preview div
+            const contractPreview = document.getElementById('contractPreviewDiv');
+            if (contractPreview) {
+                // Create image overlay that covers the entire contract
+                const overlay = document.createElement('div');
+                overlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; align-items: center; justify-content: center; z-index: 10;';
+                overlay.innerHTML = '<img src="https://github.com/user-attachments/assets/0bdb61c2-fc8c-422a-a991-ef42454f2b1c" alt="REPAIR BOT" style="max-width: 90%; max-height: 90%; width: auto; height: auto;">';
+                contractPreview.appendChild(overlay);
+                
+                // After 2 seconds, remove overlay and update everything
+                setTimeout(() => {
+                    // Remove the overlay
+                    overlay.remove();
+                    
+                    // Update contract with signed version
+                    const signedContract = generateContract();
+                    contractPreview.innerHTML = '<pre style="white-space: pre-wrap;">' + signedContract + '</pre>';
+                    
+                    // Hide sign button and show action buttons
+                    const signButton = document.getElementById('signRepairButton');
+                    const actionButtons = document.getElementById('repairActionButtons');
+                    if (signButton) signButton.style.display = 'none';
+                    if (actionButtons) actionButtons.style.display = 'grid';
+                    
+                    // Disable signature inputs
+                    document.getElementById('repairSignature1').disabled = true;
+                    document.getElementById('repairSignature2').disabled = true;
+                }, 2000);
+            }
+        }
+        
+        function viewRepairContract() {
+            const contractText = generateContract();
+            
+            // Create modal
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; overflow-y: auto;';
+            modal.innerHTML = `
+                <div style="background: white; max-width: 900px; margin: 50px auto; padding: 40px; border-radius: 20px; position: relative;">
+                    <span onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; color: #6b7280;">&times;</span>
+                    <h2 style="margin-bottom: 20px;">Contract Preview</h2>
+                    <pre style="white-space: pre-wrap; font-family: monospace; line-height: 1.6; max-height: 70vh; overflow-y: auto;">${contractText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+        
+        function printContract() {
+            const contractText = generateContract();
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Enhanced REPAIR Protocol Contract</title></head><body>');
+            printWindow.document.write('<pre style="font-family: monospace; white-space: pre-wrap; line-height: 1.6;">');
+            printWindow.document.write(contractText.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+            printWindow.document.write('</pre></body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
