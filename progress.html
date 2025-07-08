@@ -141,7 +141,10 @@
             uploadedText = text;
             const wordCount = text.split(/\s+/).filter(Boolean).length;
             const progress = Math.min(100, Math.floor(wordCount / 100));
-            results.innerHTML = `<p><strong>Words:</strong> ${wordCount}</p><p>Analysis complete.</p>`;
+            results.innerHTML = `
+                <p><strong>Words:</strong> ${wordCount}</p>
+                <p><strong>Completion:</strong> ${progress}%</p>
+                <p>Analysis complete.</p>`;
 
             if(progressChart){ progressChart.destroy(); }
             progressChart = new Chart(progressCtx, {
