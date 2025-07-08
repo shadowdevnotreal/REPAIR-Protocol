@@ -7,7 +7,7 @@
 
 ### Even an apology needs a roadmap.
 
-This project provides an interactive implementation of the **REPAIR Protocol**—a step‑by‑step process for acknowledging harm, planning amends, and rebuilding trust. The single page application (`Index.html`) includes enhanced cognitive tools, progress tracking, and a printable reconciliation contract.
+This project provides an interactive implementation of the **REPAIR Protocol**—a step‑by‑step process for acknowledging harm, planning amends, and rebuilding trust. The main protocol interface (`repair.html`) includes enhanced cognitive tools, progress tracking, and a printable reconciliation contract.
 
 ## Features
 
@@ -31,15 +31,16 @@ This project provides an interactive implementation of the **REPAIR Protocol**�
 ## Usage
 
 1. Clone or download this repository.
-2. Open `Index.html` in a modern web browser. No additional server is required.
-3. Work through each phase, filling out the forms and navigating with the **Next** and **Previous** buttons.
-4. After completing all phases, review and sign the generated contract. Export or print it for your records.
+2. Open `index.html` in a modern web browser and use the buttons to navigate to the desired page.
+3. Work through each phase of the protocol in `repair.html`, filling out the forms and navigating with the **Next** and **Previous** buttons.
+4. Visit `progress.html` to upload your saved contract (PDF or TXT) and click **ANALYZE** to generate charts and a timeline of your journey. Download a text report when ready or return to the chatbot for assistance.
+5. After completing all phases, review and sign the generated contract. Export or print it for your records.
 
 All data stays on your machine unless you choose to share or upload the contract.
 
 ## Development
 
-The entire application is contained in `Index.html`. HTML, CSS, and vanilla JavaScript are used—no external build tools are required. Edits can be made directly in that file. Feel free to fork the repository and submit pull requests.
+The entire protocol application is contained in `repair.html`. HTML, CSS, and vanilla JavaScript are used—no external build tools are required. Edits can be made directly in that file. Feel free to fork the repository and submit pull requests.
 
 ## License
 
