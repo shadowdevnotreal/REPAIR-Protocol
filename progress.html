@@ -7,6 +7,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Use unpkg for pdf.js to avoid cdnjs restrictions -->
     <script src="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
+    <script>
+        // configure PDF.js worker in case the CDN blocks the default path
+        if (window['pdfjsLib']) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc =
+                'https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js';
+        }
+    </script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
