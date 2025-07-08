@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Tracker</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,119 +38,11 @@
 </head>
 <body>
     <nav>
-        <a href="repair.html">REPAIR Protocol</a> |
-        <a href="about.html">Visual Framework</a> |
         <a href="progress.html">Progress</a>
     </nav>
     <div class="container">
         <h1>Progress Tracker</h1>
         <p>You can upload the contract you previously used with the GPT bot to see your progress visualized.</p>
         <p>The progress will become a flow chart and other various colorful ways for you to visualize what you are doing and how far you have come along.</p>
-        <p><strong>Upload contract (PDF or TXT):</strong></p>
-        <input type="file" id="contractInput" accept=".pdf,.txt" />
-        <button id="analyzeBtn" style="margin-left:10px;">ANALYZE</button>
-        <div id="results" style="margin-top:20px;"></div>
-        <div style="margin-top:20px;">
-            <canvas id="progressChart"></canvas>
-        </div>
-        <div style="margin-top:30px;">
-            <canvas id="timelineChart"></canvas>
-        </div>
-        <button id="downloadBtn" style="display:none;margin-top:10px;">Download Report</button>
-        <p style="margin-top:20px;"><a href="https://chat.openai.com/" target="_blank">Chat with GPT Bot</a></p>
-    </div>
-    <script>
-        const input = document.getElementById('contractInput');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const results = document.getElementById('results');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const progressCtx = document.getElementById('progressChart').getContext('2d');
-        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
-        let uploadedText = '';
-        let progressChart, timelineChart;
-
-        analyzeBtn.addEventListener('click', () => {
-            const file = input.files[0];
-            if(!file){
-                alert('Please upload a contract file first.');
-                return;
-            }
-
-            if(file.type === 'application/pdf'){
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const typedarray = new Uint8Array(reader.result);
-                    pdfjsLib.getDocument(typedarray).promise.then(pdf => {
-                        let text = '';
-                        const pages = [];
-                        const max = Math.min(pdf.numPages, 3);
-                        for(let i=1;i<=max;i++){
-                            pages.push(pdf.getPage(i).then(page => page.getTextContent()).then(tc => {
-                                text += tc.items.map(t => t.str).join(' ');
-                            }));
-                        }
-                        Promise.all(pages).then(() => processText(text));
-                    });
-                };
-                reader.readAsArrayBuffer(file);
-            } else {
-                const reader = new FileReader();
-                reader.onload = () => processText(reader.result);
-                reader.readAsText(file);
-            }
-        });
-
-        function processText(text){
-            uploadedText = text;
-            const wordCount = text.split(/\s+/).filter(Boolean).length;
-            const progress = Math.min(100, Math.floor(wordCount / 100));
-            results.innerHTML = `<p><strong>Words:</strong> ${wordCount}</p>`;
-
-            if(progressChart){ progressChart.destroy(); }
-            progressChart = new Chart(progressCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Progress'],
-                    datasets: [{
-                        label: 'Completion %',
-                        data: [progress],
-                        backgroundColor: '#667eea'
-                    }]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true, max: 100 } }
-                }
-            });
-
-            if(timelineChart){ timelineChart.destroy(); }
-            timelineChart = new Chart(timelineCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Start','Phase 2','Phase 3','Phase 4','Complete'],
-                    datasets: [{
-                        label: 'Progress',
-                        data: [0, progress/4, progress/2, progress*0.75, progress],
-                        borderColor: '#764ba2',
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true, max: 100 } }
-                }
-            });
-
-            downloadBtn.style.display = 'inline-block';
-        }
-
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([uploadedText], {type:'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'progress_report.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-    </script>
 </body>
 </html>
