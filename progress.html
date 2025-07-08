@@ -38,57 +38,11 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">Home</a> |
-        <a href="repair.html">REPAIR Protocol</a> |
-        <a href="about.html">Visual Framework</a> |
         <a href="progress.html">Progress</a>
     </nav>
     <div class="container">
         <h1>Progress Tracker</h1>
         <p>You can upload the contract you previously used with the GPT bot to see your progress visualized.</p>
         <p>The progress will become a flow chart and other various colorful ways for you to visualize what you are doing and how far you have come along.</p>
-        <p><strong>Upload contract (PDF or TXT):</strong></p>
-        <input type="file" id="contractInput" accept=".pdf,.txt" />
-        <button id="analyzeBtn" style="margin-left:10px;">ANALYZE</button>
-        <div id="results" style="margin-top:20px;"></div>
-        <button id="downloadBtn" style="display:none;margin-top:10px;">Download Report</button>
-        <p style="margin-top:20px;"><a href="https://chat.openai.com/" target="_blank">Chat with GPT Bot</a></p>
-    </div>
-    <script>
-        const input = document.getElementById('contractInput');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const results = document.getElementById('results');
-        const downloadBtn = document.getElementById('downloadBtn');
-        let uploadedText = '';
-
-        analyzeBtn.addEventListener('click', () => {
-            const file = input.files[0];
-            if(!file){
-                alert('Please upload a contract file first.');
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = () => {
-                uploadedText = reader.result;
-                const wordCount = uploadedText.split(/\s+/).filter(Boolean).length;
-                const percent = Math.min(100, Math.floor(wordCount / 100));
-                results.innerHTML = `<p><strong>Words:</strong> ${wordCount}</p>` +
-                    `<div style="background:#eee;border-radius:4px;width:100%;height:20px;">` +
-                    `<div style="background:#667eea;height:100%;width:${percent}%"></div></div>`;
-                downloadBtn.style.display = 'inline-block';
-            };
-            reader.readAsText(file);
-        });
-
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([uploadedText], {type:'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'progress_report.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-    </script>
 </body>
 </html>
