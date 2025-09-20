@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPAIR Protocol - AI-Powered Mediation Mode</title>
+    
+    <!-- Desktop Enhancement Framework -->
+    <link rel="stylesheet" href="desktop-enhancements.css">
+    
+    <script src="theme-system.js"></script>
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: rgba(255, 255, 255, 0.98);
+            --bg-glass: rgba(255, 255, 255, 0.25);
+            --bg-glass-hover: rgba(255, 255, 255, 0.35);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --border-color: rgba(102, 126, 234, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(102, 126, 234, 0.3);
+            --backdrop-blur: blur(20px);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Variables - WCAG AA+ Compliant */
+            --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --bg-secondary: rgba(15, 23, 42, 0.98);
+            --bg-glass: rgba(30, 41, 59, 0.85);
+            --bg-glass-hover: rgba(30, 41, 59, 0.95);
+            --card-bg: rgba(30, 41, 59, 0.95);
+            /* High contrast text colors for accessibility */
+            --text-primary: #ffffff;
+            --text-secondary: #f1f5f9;
+            --text-tertiary: #e2e8f0;
+            --text-on-glass: #ffffff;
+            --text-hover: #c4b5fd;
+            --border-color: rgba(203, 213, 225, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(196, 181, 253, 0.4);
+            --backdrop-blur: blur(20px);
+            --accent-primary: #a78bfa;
+            --accent-secondary: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Theme Toggle in Header */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-glass);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-glass-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-hover);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: scale(1.1);
+        }
+
+        /* Dynamic Navigation */
+        nav {
+            background: var(--bg-glass);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 15px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-hover);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            cursor: default;
+        }
+
+        .nav-link.active:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .ai-nav-link {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .ai-nav-link:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-hover);
+        }
+
+        .container {
+            /* Responsive sizing handled by desktop-enhancements.css */
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        /* Mediation Control Panel */
+        .mediation-panel {
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .session-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .session-status.active {
+            background: var(--bg-glass-hover);
+            color: #065f46;
+            border: 1px solid var(--border-color);
+        }
+
+        .session-status.waiting {
+            background: var(--bg-glass-hover);
+            color: #92400e;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Participants Panel */
+        .participants-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .participant-card {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .participant-card.apologizer {
+            border-left-color: #3b82f6;
+        }
+
+        .participant-card.harmed {
+            border-left-color: #10b981;
+        }
+
+        .participant-card.mediator {
+            border-left-color: #f59e0b;
+        }
+
+        .participant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .participant-status {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+        }
+
+        .participant-status.online {
+            background: var(--bg-glass-hover);
+            color: #065f46;
+            border: 1px solid var(--border-color);
+        }
+
+        .participant-status.away {
+            background: var(--bg-glass-hover);
+            color: #92400e;
+            border: 1px solid var(--border-color);
+        }
+
+        .participant-status.offline {
+            background: var(--bg-glass-hover);
+            color: var(--text-tertiary);
+            border: 1px solid var(--border-color);
+        }
+
+        .participant-role {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        /* AI Mediator Suggestions */
+        .ai-suggestions {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #0ea5e9;
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .suggestion-header {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Common Ground Tracker */
+        .common-ground {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .ground-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-glass-hover);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border-left: 3px solid #22c55e;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* De-escalation Tools */
+        .deescalation-tools {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .tool-button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fbbf24;
+            color: #92400e;
+        }
+
+        .tool-button:hover {
+            background: #f59e0b;
+            color: white;
+        }
+
+        /* Main Session Area */
+        .session-area {
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            border: 1px solid var(--border-color);
+        }
+
+        .session-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .session-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .session-description {
+            color: var(--text-tertiary);
+            font-size: 1rem;
+        }
+
+        /* Chat/Communication Area */
+        .communication-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-container {
+            flex: 1;
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 2px solid var(--border-color);
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .message {
+            background: var(--bg-glass-hover);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .message.apologizer {
+            border-left-color: #3b82f6;
+        }
+
+        .message.harmed {
+            border-left-color: #10b981;
+        }
+
+        .message.mediator {
+            border-left-color: #f59e0b;
+        }
+
+        .message.ai {
+            border-left-color: #8b5cf6;
+            background: var(--bg-glass);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-author {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .message-content {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Input Area */
+        .input-area {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .message-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .send-button {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* AI Analysis Overlay */
+        .ai-analysis-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .analysis-modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            margin: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-tertiary);
+        }
+
+        /* Guided Exercises */
+        .guided-exercise {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #667eea;
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise-step {
+            background: var(--bg-glass-hover);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Additional dark mode text fixes */
+        [data-theme="dark"] .container,
+        [data-theme="dark"] .session-area,
+        [data-theme="dark"] .mediation-panel {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] .container h1,
+        [data-theme="dark"] .container h2,
+        [data-theme="dark"] .container h3,
+        [data-theme="dark"] .container h4,
+        [data-theme="dark"] .session-title,
+        [data-theme="dark"] .panel-title,
+        [data-theme="dark"] .section-title,
+        [data-theme="dark"] .modal-title {
+            color: var(--text-primary) !important;
+        }
+
+        .emoji {
+            font-style: normal;
+        }
+
+        /* Responsive Design handled by desktop-enhancements.css */
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon" id="theme-icon">🌙</span>
+        <span id="theme-text">Dark Mode</span>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">
+                <span class="emoji">🏠</span> Home
+            </a>
+            <a href="repair.html" class="nav-link">
+                <span class="emoji">🔧</span> REPAIR Protocol
+            </a>
+            <a href="about.html" class="nav-link">
+                <span class="emoji">📊</span> Visual Framework
+            </a>
+            <a href="progress.html" class="nav-link">
+                <span class="emoji">📈</span> Progress
+            </a>
+            <span class="nav-link active">
+                <span class="emoji">🤝</span> Mediation
+            </span>
+            <a href="sign-contract.html" class="nav-link">
+                <span class="emoji">✍️</span> Sign Contract
+            </a>
+            <a href="https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot"
+               class="nav-link ai-nav-link"
+               target="_blank"
+               rel="noopener noreferrer">
+                <span class="emoji">🤖</span> AI Coach
+            </a>
+        </div>
+    </nav>
+
+    <div class="header">
+        <div class="container desktop-optimized">
+            <h1>AI-Powered Mediation Mode</h1>
+            <p>Multi-party reconciliation with real-time guidance and de-escalation support</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container desktop-optimized responsive-padding">
+            <!-- Main Session Area -->
+            <div class="session-area desktop-center">
+                <div class="session-header">
+                    <h2 class="session-title">Active Mediation Session</h2>
+                    <p class="session-description">
+                        AI-facilitated dialogue between multiple parties using the REPAIR Protocol framework
+                    </p>
+                </div>
+
+                <div class="communication-area">
+                    <div class="messages-container" id="messages-container">
+                        <div class="message ai">
+                            <div class="message-header">
+                                <span class="message-author">AI Mediator</span>
+                                <span class="message-time">Just now</span>
+                            </div>
+                            <div class="message-content">
+                                Welcome to your AI-powered mediation session. I'll help facilitate this conversation using proven reconciliation techniques. Let's begin with each party sharing their perspective on the situation.
+                            </div>
+                        </div>
+
+                        <div class="message apologizer">
+                            <div class="message-header">
+                                <span class="message-author">Apologizing Party</span>
+                                <span class="message-time">2 minutes ago</span>
+                            </div>
+                            <div class="message-content">
+                                I appreciate this opportunity to work through this situation. I understand that my actions caused real harm, and I want to take full responsibility and make things right.
+                            </div>
+                        </div>
+
+                        <div class="message harmed">
+                            <div class="message-header">
+                                <span class="message-author">Harmed Party</span>
+                                <span class="message-time">1 minute ago</span>
+                            </div>
+                            <div class="message-content">
+                                Thank you for acknowledging that. I'm here because I believe in the possibility of healing, but I need to see genuine understanding and concrete changes.
+                            </div>
+                        </div>
+
+                        <div class="message ai">
+                            <div class="message-header">
+                                <span class="message-author">AI Mediator</span>
+                                <span class="message-time">Just now</span>
+                            </div>
+                            <div class="message-content">
+                                I'm detecting positive engagement from both parties. This is an excellent foundation. Let's explore the specific impacts that need to be addressed. Would the harmed party like to share what has been most difficult about this situation?
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-area">
+                        <textarea class="message-input" id="message-input" placeholder="Type your message here... The AI will analyze for tone and suggest improvements if needed."></textarea>
+                        <button class="send-button" onclick="sendMessage()">
+                            <span class="emoji">📤</span> Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mediation Control Panel -->
+        <div class="mediation-panel">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <span class="emoji">🤖</span> AI Mediator
+                </h3>
+                <div class="session-status active">Active Session</div>
+            </div>
+
+            <!-- Participants Section -->
+            <div class="participants-section">
+                <h4 class="section-title">
+                    <span class="emoji">👥</span> Participants
+                </h4>
+
+                <div class="participant-card apologizer">
+                    <div class="participant-header">
+                        <span class="participant-name">Alex Chen</span>
+                        <span class="participant-status online">Online</span>
+                    </div>
+                    <div class="participant-role">Apologizing Party</div>
+                </div>
+
+                <div class="participant-card harmed">
+                    <div class="participant-header">
+                        <span class="participant-name">Jordan Smith</span>
+                        <span class="participant-status online">Online</span>
+                    </div>
+                    <div class="participant-role">Harmed Party</div>
+                </div>
+
+                <div class="participant-card mediator">
+                    <div class="participant-header">
+                        <span class="participant-name">AI Mediator</span>
+                        <span class="participant-status online">Active</span>
+                    </div>
+                    <div class="participant-role">Neutral Facilitator</div>
+                </div>
+            </div>
+
+            <!-- AI Suggestions -->
+            <div class="participants-section">
+                <h4 class="section-title">
+                    <span class="emoji">💡</span> Real-time Guidance
+                </h4>
+
+                <div class="ai-suggestions">
+                    <div class="suggestion-header">
+                        <span class="emoji">🎯</span> Current Focus
+                    </div>
+                    <div class="suggestion-text">
+                        Both parties are showing openness. Continue exploring emotional impacts before moving to solution-building.
+                    </div>
+                </div>
+
+                <div class="ai-suggestions">
+                    <div class="suggestion-header">
+                        <span class="emoji">📊</span> Communication Analysis
+                    </div>
+                    <div class="suggestion-text">
+                        Empathy level: High | Defensiveness: Low | Engagement: Strong
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Ground Tracker -->
+            <div class="participants-section">
+                <h4 class="section-title">
+                    <span class="emoji">🤝</span> Common Ground
+                </h4>
+
+                <div class="common-ground">
+                    <div class="ground-item">
+                        Both want to repair the relationship
+                    </div>
+                    <div class="ground-item">
+                        Shared commitment to honesty
+                    </div>
+                    <div class="ground-item">
+                        Acknowledge harm occurred
+                    </div>
+                </div>
+            </div>
+
+            <!-- De-escalation Tools -->
+            <div class="participants-section">
+                <h4 class="section-title">
+                    <span class="emoji">🛡️</span> De-escalation Tools
+                </h4>
+
+                <div class="deescalation-tools">
+                    <button class="tool-button" onclick="suggestBreak()">
+                        <span class="emoji">⏸️</span> Suggest Break
+                    </button>
+                    <button class="tool-button" onclick="refocusOnCommonGround()">
+                        <span class="emoji">🎯</span> Refocus on Goals
+                    </button>
+                    <button class="tool-button" onclick="guidedBreathing()">
+                        <span class="emoji">🧘</span> Guided Calm Exercise
+                    </button>
+                    <button class="tool-button" onclick="reframeConversation()">
+                        <span class="emoji">🔄</span> Reframe Discussion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Analysis Overlay -->
+    <div class="ai-analysis-overlay" id="ai-analysis-overlay">
+        <div class="analysis-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">AI Session Analysis</h3>
+                <button class="close-button" onclick="closeAnalysis()">&times;</button>
+            </div>
+            <div id="analysis-content">
+                <p>Analysis content will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme management
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+
+            // Update theme toggle button
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (newTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+
+            // Store preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (savedTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+
+        // Mediation session state
+        let sessionData = {
+            participants: ['Alex Chen', 'Jordan Smith'],
+            messages: [],
+            currentPhase: 'exploration',
+            emotionalTemperature: 'calm',
+            commonGroundItems: [],
+            riskLevel: 'low'
+        };
+
+        // Initialize mediation session
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+            initializeSession();
+            startRealTimeAnalysis();
+        });
+
+        function initializeSession() {
+            console.log('Initializing AI-powered mediation session...');
+            // Load session data and set up real-time monitoring
+        }
+
+        function startRealTimeAnalysis() {
+            // Monitor conversation tone and provide real-time guidance
+            setInterval(analyzeSessionTone, 5000);
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+
+            if (!message) return;
+
+            // AI pre-analysis of message before sending
+            const analysis = analyzeMessageBeforeSending(message);
+
+            if (analysis.riskLevel === 'high') {
+                if (!confirm('The AI detected potentially escalating language. Would you like to rephrase this message?')) {
+                    return;
+                }
+            }
+
+            // Add message to chat
+            addMessageToChat('Current User', message, 'user');
+            messageInput.value = '';
+
+            // Trigger AI response
+            setTimeout(() => {
+                generateAIResponse(message);
+            }, 1000);
+        }
+
+        function analyzeMessageBeforeSending(message) {
+            // Simplified analysis - in real implementation, this would use NLP
+            const riskWords = ['but', 'however', 'your fault', 'you always', 'you never'];
+            const empathyWords = ['understand', 'feel', 'perspective', 'experience'];
+
+            let riskLevel = 'low';
+            let empathyLevel = 'low';
+
+            riskWords.forEach(word => {
+                if (message.toLowerCase().includes(word)) {
+                    riskLevel = 'medium';
+                }
+            });
+
+            empathyWords.forEach(word => {
+                if (message.toLowerCase().includes(word)) {
+                    empathyLevel = 'high';
+                }
+            });
+
+            return { riskLevel, empathyLevel };
+        }
+
+        function addMessageToChat(author, content, type) {
+            const messagesContainer = document.getElementById('messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-author">${author}</span>
+                    <span class="message-time">${currentTime}</span>
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateAIResponse(userMessage) {
+            // AI generates contextual mediation responses
+            const responses = [
+                "I notice both parties are maintaining respectful communication. This creates a safe space for deeper exploration. How are you both feeling about the progress so far?",
+                "The AI analysis shows strong empathy signals in this conversation. Let's build on this foundation to explore specific ways to move forward.",
+                "I'm detecting some tension. Let's take a moment to acknowledge what's been shared and ensure both parties feel heard before continuing.",
+                "This is an excellent example of taking responsibility. How does hearing this acknowledgment feel for the harmed party?",
+                "The conversation is progressing well. I suggest we now focus on identifying specific actions that would help rebuild trust."
+            ];
+
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addMessageToChat('AI Mediator', randomResponse, 'ai');
+
+            // Update guidance panel
+            updateGuidancePanel();
+        }
+
+        function updateGuidancePanel() {
+            // Update AI suggestions based on conversation analysis
+            const suggestions = document.querySelectorAll('.ai-suggestions .suggestion-text');
+
+            if (suggestions[0]) {
+                suggestions[0].textContent = 'Conversation flowing well. Both parties engaged and receptive.';
+            }
+
+            if (suggestions[1]) {
+                suggestions[1].textContent = 'Empathy level: High | Defensiveness: Low | Engagement: Strong';
+            }
+        }
+
+        function analyzeSessionTone() {
+            // Real-time analysis of conversation tone and dynamics
+            const temperature = calculateEmotionalTemperature();
+            updateEmotionalTemperature(temperature);
+        }
+
+        function calculateEmotionalTemperature() {
+            // Simplified calculation - in real implementation, this would use sentiment analysis
+            return Math.random() > 0.8 ? 'warming' : 'calm';
+        }
+
+        function updateEmotionalTemperature(temperature) {
+            sessionData.emotionalTemperature = temperature;
+
+            if (temperature === 'warming') {
+                showDeescalationSuggestion();
+            }
+        }
+
+        function showDeescalationSuggestion() {
+            const suggestion = document.createElement('div');
+            suggestion.className = 'ai-suggestions';
+            suggestion.innerHTML = `
+                <div class="suggestion-header">
+                    <span class="emoji">⚠️</span> Temperature Check
+                </div>
+                <div class="suggestion-text">
+                    I'm noticing some emotional escalation. Consider taking a brief pause or using guided breathing.
+                </div>
+            `;
+
+            // Add to guidance panel temporarily
+            setTimeout(() => {
+                if (suggestion.parentNode) {
+                    suggestion.parentNode.removeChild(suggestion);
+                }
+            }, 10000);
+        }
+
+        // De-escalation tool functions
+        function suggestBreak() {
+            addMessageToChat('AI Mediator', 'I suggest we take a 5-minute break to process what\'s been shared. This can help us return with fresh perspective and continued focus on healing.', 'ai');
+        }
+
+        function refocusOnCommonGround() {
+            addMessageToChat('AI Mediator', 'Let\'s refocus on what we\'ve established: you both want to repair this relationship and are committed to honesty. These shared values can guide us forward.', 'ai');
+        }
+
+        function guidedBreathing() {
+            addMessageToChat('AI Mediator', 'Let\'s pause for a moment. Take three deep breaths together: In for 4 counts... hold for 4... out for 6. This helps activate our calm response and maintain constructive dialogue.', 'ai');
+        }
+
+        function reframeConversation() {
+            addMessageToChat('AI Mediator', 'I\'d like to reframe our discussion around solutions and healing rather than past hurts. What would a repaired relationship look like to each of you?', 'ai');
+        }
+
+        function closeAnalysis() {
+            document.getElementById('ai-analysis-overlay').style.display = 'none';
+        }
+
+        // Guided exercises
+        function startGuidedExercise(exerciseType) {
+            const exercises = {
+                perspective: {
+                    title: 'Perspective-Taking Exercise',
+                    steps: [
+                        'Each party shares their perspective for 2 minutes uninterrupted',
+                        'The other party reflects back what they heard',
+                        'First party confirms or clarifies understanding',
+                        'Switch roles and repeat'
+                    ]
+                },
+                empathy: {
+                    title: 'Empathy Building Exercise',
+                    steps: [
+                        'Apologizing party: "When I did X, you must have felt..."',
+                        'Harmed party: confirm or correct the emotional impact',
+                        'Explore the deeper emotional experience together',
+                        'Acknowledge the full emotional impact'
+                    ]
+                },
+                commitment: {
+                    title: 'Commitment Building Exercise',
+                    steps: [
+                        'Identify 3 specific behaviors that need to change',
+                        'Create measurable commitments for each behavior',
+                        'Set timeline and check-in schedule',
+                        'Both parties agree on accountability measures'
+                    ]
+                }
+            };
+
+            const exercise = exercises[exerciseType];
+            if (exercise) {
+                showGuidedExercise(exercise);
+            }
+        }
+
+        function showGuidedExercise(exercise) {
+            const exerciseHtml = `
+                <div class="guided-exercise">
+                    <div class="exercise-title">
+                        <span class="emoji">🎯</span> ${exercise.title}
+                    </div>
+                    ${exercise.steps.map((step, index) =>
+                        `<div class="exercise-step">${index + 1}. ${step}</div>`
+                    ).join('')}
+                </div>
+            `;
+
+            addMessageToChat('AI Mediator', `Let's try a guided exercise: ${exercise.title}`, 'ai');
+
+            // In a real implementation, this would create an interactive exercise interface
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Auto-scroll message input on focus
+        document.getElementById('message-input').addEventListener('focus', function() {
+            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // Simulate live session activity
+        setInterval(() => {
+            // Add subtle visual indicators of live AI monitoring
+            const statusIndicator = document.querySelector('.session-status');
+            statusIndicator.style.opacity = '0.7';
+            setTimeout(() => {
+                statusIndicator.style.opacity = '1';
+            }, 200);
+        }, 10000);
+    </script>
+</body>
+</html>

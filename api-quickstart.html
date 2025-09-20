@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPAIR Protocol - API Integration Quickstart</title>
+    
+    <!-- Desktop Enhancement Framework -->
+    <link rel="stylesheet" href="desktop-enhancements.css">
+    
+    <script src="theme-system.js"></script>
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: rgba(255, 255, 255, 0.98);
+            --bg-glass: rgba(255, 255, 255, 0.25);
+            --bg-glass-hover: rgba(255, 255, 255, 0.35);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-tertiary: #6b7280;
+            --border-color: rgba(102, 126, 234, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(102, 126, 234, 0.3);
+            --backdrop-blur: blur(20px);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Variables - WCAG AA+ Compliant */
+            --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --bg-secondary: rgba(15, 23, 42, 0.98);
+            --bg-glass: rgba(30, 41, 59, 0.85);
+            --bg-glass-hover: rgba(30, 41, 59, 0.95);
+            --card-bg: rgba(30, 41, 59, 0.95);
+            /* High contrast text colors for accessibility */
+            --text-primary: #ffffff;
+            --text-secondary: #f1f5f9;
+            --text-tertiary: #e2e8f0;
+            --text-on-glass: #ffffff;
+            --text-hover: #c4b5fd;
+            --border-color: rgba(203, 213, 225, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(196, 181, 253, 0.4);
+            --backdrop-blur: blur(20px);
+            --accent-primary: #a78bfa;
+            --accent-secondary: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInPage 0.5s ease-in-out forwards;
+        }
+        
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theme Toggle in Header */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-glass);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-glass-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-hover);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: scale(1.1);
+        }
+
+        .container {
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-tertiary);
+        }
+
+        .api-config {
+            background: var(--bg-glass);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .api-config h2 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-grid {
+            display: grid;
+            margin-bottom: 1rem;
+        }
+
+        .config-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .config-item label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .config-item input, .config-item select {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .config-item input:focus, .config-item select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .config-item input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .provider-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: var(--bg-glass);
+            border-radius: 12px;
+            padding: 4px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .provider-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .provider-tab.active {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .provider-tab:hover:not(.active) {
+            background: var(--bg-glass-hover);
+            color: var(--text-secondary);
+        }
+
+        .language-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .language-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-glass);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .language-tab.active {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .language-tab:hover:not(.active) {
+            background: var(--bg-glass-hover);
+            color: var(--text-primary);
+        }
+
+        .variant-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .variant-tab {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            transition: all 0.2s;
+        }
+
+        .variant-tab.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .variant-tab:hover:not(.active) {
+            background: var(--bg-glass-hover);
+            color: var(--text-secondary);
+        }
+
+        .code-section {
+            background: var(--bg-glass);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .code-header {
+            background: var(--bg-glass-hover);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .copy-button {
+            padding: 0.5rem 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .copy-button.copied {
+            background: #dc2626;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+            background: #1f2937;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'Fira Code', 'Monaco', 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #f9fafb;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .info-panel {
+            background: var(--bg-glass);
+            border: 2px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .info-panel h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-panel ul {
+            margin-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .info-panel li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .info-panel strong {
+            color: var(--text-primary);
+        }
+
+        .info-panel a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .info-panel a:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-glass);
+            backdrop-filter: var(--backdrop-blur);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .back-button:hover {
+            background: var(--bg-glass-hover);
+            transform: translateY(-2px) translateX(-2px);
+            box-shadow: 0 8px 25px var(--shadow-hover);
+        }
+        
+        .back-button::before {
+            content: '←';
+            transition: transform 0.3s ease;
+        }
+        
+        .back-button:hover::before {
+            transform: translateX(-3px);
+        }
+
+        .installation-notes {
+            background: var(--bg-glass);
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .installation-notes strong {
+            color: var(--text-primary);
+        }
+
+        .installation-notes code {
+            background: var(--bg-glass-hover);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--text-primary);
+        }
+
+        .model-info {
+            background: var(--bg-glass);
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .model-info strong {
+            color: var(--text-primary);
+        }
+
+        .error-handling {
+            background: var(--bg-glass);
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            backdrop-filter: var(--backdrop-blur);
+        }
+
+        .error-handling strong {
+            color: var(--text-primary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg-glass);
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        nav div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-hover);
+            transform: translateY(-1px);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Additional dark mode text fixes */
+        [data-theme="dark"] .container,
+        [data-theme="dark"] .api-config,
+        [data-theme="dark"] .info-panel {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] .container h1,
+        [data-theme="dark"] .container h2,
+        [data-theme="dark"] .container h3,
+        [data-theme="dark"] .api-config h2,
+        [data-theme="dark"] .info-panel h3 {
+            color: var(--text-primary) !important;
+        }
+
+        /* Mobile-specific overrides are handled by desktop-enhancements.css */
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon" id="theme-icon">🌙</span>
+        <span id="theme-text">Dark Mode</span>
+    </div>
+
+    <a href="repair.html" class="back-button" id="back-button">
+        Back to REPAIR Protocol
+    </a>
+
+    <div class="container desktop-center responsive-padding">
+        <div class="header header-section responsive-padding">
+            <h1>🚀 API Integration Quickstart</h1>
+            <p>Complete guide for integrating OpenAI and Anthropic APIs with the REPAIR Protocol</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navigation desktop-center">
+            <div>
+                <a href="index.html">🏠 Home</a>
+                <a href="repair.html">🔧 Start REPAIR</a>
+                <a href="mediation-mode.html">⚖️ Mediation</a>
+                <a href="sign-contract.html">📝 Contract</a>
+                <a href="progress.html">📊 Progress</a>
+                <a href="about.html">ℹ️ About</a>
+            </div>
+        </nav>
+
+        <div class="api-config desktop-center">
+            <h2>🔧 API Configuration</h2>
+            <div class="config-grid features-grid desktop-center">
+                <div class="config-item">
+                    <label for="openai-key">OpenAI API Key</label>
+                    <input type="password" id="openai-key" placeholder="sk-...">
+                </div>
+                <div class="config-item">
+                    <label for="anthropic-key">Anthropic API Key</label>
+                    <input type="password" id="anthropic-key" placeholder="sk-ant-...">
+                </div>
+                <div class="config-item">
+                    <label for="openai-model">OpenAI Model</label>
+                    <select id="openai-model">
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label for="anthropic-model">Anthropic Model</label>
+                    <select id="anthropic-model">
+                        <option value="claude-opus-4-1-20250805">Claude Opus 4.1</option>
+                        <option value="claude-sonnet-4-20250514" selected>Claude Sonnet 4</option>
+                        <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                        <option value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel desktop-center">
+            <h3>📋 Getting Started</h3>
+            <ul>
+                <li><strong>OpenAI API:</strong> Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></li>
+                <li><strong>Anthropic API:</strong> Get your API key from <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a></li>
+                <li><strong>Configuration:</strong> Enter your API keys above to auto-populate all code examples</li>
+                <li><strong>Models:</strong> Select your preferred model to update all examples accordingly</li>
+            </ul>
+        </div>
+
+        <div class="provider-tabs desktop-center">
+            <button class="provider-tab active" data-provider="both">Both APIs</button>
+            <button class="provider-tab" data-provider="openai">OpenAI Only</button>
+            <button class="provider-tab" data-provider="anthropic">Anthropic Only</button>
+        </div>
+
+        <div class="language-tabs desktop-center">
+            <button class="language-tab active" data-language="javascript">JavaScript</button>
+            <button class="language-tab" data-language="typescript">TypeScript</button>
+            <button class="language-tab" data-language="python">Python</button>
+            <button class="language-tab" data-language="java">Java</button>
+            <button class="language-tab" data-language="curl">cURL</button>
+            <button class="language-tab" data-language="php">PHP</button>
+            <button class="language-tab" data-language="go">Go</button>
+            <button class="language-tab" data-language="ruby">Ruby</button>
+        </div>
+
+        <div id="code-examples" class="desktop-center"></div>
+
+        <div class="info-panel desktop-center">
+            <h3>🎯 Best Practices</h3>
+            <ul>
+                <li><strong>Rate Limiting:</strong> Implement proper rate limiting to avoid API limits</li>
+                <li><strong>Error Handling:</strong> Always handle HTTP errors and API-specific error responses</li>
+                <li><strong>Security:</strong> Never expose API keys in client-side code</li>
+                <li><strong>Timeouts:</strong> Set appropriate timeouts for API requests (30-60 seconds)</li>
+                <li><strong>Streaming:</strong> Consider using streaming for long responses</li>
+                <li><strong>Cost Monitoring:</strong> Track token usage and API costs</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="config/api-examples.js"></script>
+    <script>
+        // Theme management
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+
+            // Update theme toggle button
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (newTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+
+            // Store preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (savedTheme === 'dark') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+
+        class APIQuickstart {
+            constructor() {
+                this.apiExamples = new APIExamples();
+                this.currentLanguage = 'javascript';
+                this.currentProvider = 'both';
+                this.currentVariant = null;
+
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateExamples();
+            }
+
+            bindEvents() {
+                // Provider tabs
+                document.querySelectorAll('.provider-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        document.querySelectorAll('.provider-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        this.currentProvider = tab.dataset.provider;
+                        this.updateExamples();
+                    });
+                });
+
+                // Language tabs
+                document.querySelectorAll('.language-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        document.querySelectorAll('.language-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        this.currentLanguage = tab.dataset.language;
+                        this.currentVariant = null; // Reset variant when changing language
+                        this.updateExamples();
+                    });
+                });
+
+                // API key inputs
+                document.getElementById('openai-key').addEventListener('input', () => this.updateExamples());
+                document.getElementById('anthropic-key').addEventListener('input', () => this.updateExamples());
+                document.getElementById('openai-model').addEventListener('change', () => this.updateExamples());
+                document.getElementById('anthropic-model').addEventListener('change', () => this.updateExamples());
+            }
+
+            updateExamples() {
+                const container = document.getElementById('code-examples');
+                container.innerHTML = '';
+
+                const openaiKey = document.getElementById('openai-key').value || 'YOUR_OPENAI_API_KEY';
+                const anthropicKey = document.getElementById('anthropic-key').value || 'YOUR_ANTHROPIC_API_KEY';
+                const openaiModel = document.getElementById('openai-model').value;
+                const anthropicModel = document.getElementById('anthropic-model').value;
+
+                const langExamples = this.apiExamples.getLanguageExamples(this.currentLanguage);
+
+                if (!langExamples || Object.keys(langExamples).length === 0) {
+                    container.innerHTML = '<p>No examples available for this language.</p>';
+                    return;
+                }
+
+                // Handle variant tabs for languages with multiple variants
+                this.createVariantTabs(langExamples, container);
+
+                // Get examples to display
+                let examplestoShow = [];
+
+                if (this.currentVariant && langExamples[this.currentVariant]) {
+                    const variantExamples = langExamples[this.currentVariant];
+                    if (this.currentProvider === 'both') {
+                        if (variantExamples.openai) examplestoShow.push(variantExamples.openai);
+                        if (variantExamples.anthropic) examplestoShow.push(variantExamples.anthropic);
+                    } else {
+                        if (variantExamples[this.currentProvider]) {
+                            examplestoShow.push(variantExamples[this.currentProvider]);
+                        }
+                    }
+                } else {
+                    // Handle direct provider examples
+                    if (this.currentProvider === 'both') {
+                        if (langExamples.openai) examplestoShow.push(langExamples.openai);
+                        if (langExamples.anthropic) examplestoShow.push(langExamples.anthropic);
+                    } else {
+                        if (langExamples[this.currentProvider]) {
+                            examplestoShow.push(langExamples[this.currentProvider]);
+                        }
+                    }
+                }
+
+                // Update examples with current API keys and models
+                examplestoShow = this.apiExamples.updateApiKeys(examplestoShow, openaiKey, anthropicKey);
+                examplestoShow = this.apiExamples.updateModels(examplestoShow, openaiModel, anthropicModel);
+
+                // Create code sections
+                examplestoShow.forEach(example => {
+                    this.createCodeSection(example, container);
+                });
+
+                // Add installation notes for specific languages
+                this.addInstallationNotes(container);
+            }
+
+            createVariantTabs(langExamples, container) {
+                const variants = Object.keys(langExamples).filter(key =>
+                    key !== 'openai' && key !== 'anthropic' &&
+                    typeof langExamples[key] === 'object' &&
+                    (langExamples[key].openai || langExamples[key].anthropic)
+                );
+
+                if (variants.length > 0) {
+                    const variantTabsContainer = document.createElement('div');
+                    variantTabsContainer.className = 'variant-tabs';
+
+                    variants.forEach((variant, index) => {
+                        const tab = document.createElement('button');
+                        tab.className = 'variant-tab';
+                        tab.textContent = variant.charAt(0).toUpperCase() + variant.slice(1);
+                        tab.dataset.variant = variant;
+
+                        if (index === 0 && !this.currentVariant) {
+                            this.currentVariant = variant;
+                            tab.classList.add('active');
+                        } else if (this.currentVariant === variant) {
+                            tab.classList.add('active');
+                        }
+
+                        tab.addEventListener('click', () => {
+                            document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+                            tab.classList.add('active');
+                            this.currentVariant = variant;
+                            this.updateExamples();
+                        });
+
+                        variantTabsContainer.appendChild(tab);
+                    });
+
+                    container.appendChild(variantTabsContainer);
+                }
+            }
+
+            createCodeSection(example, container) {
+                const section = document.createElement('div');
+                section.className = 'code-section';
+
+                const header = document.createElement('div');
+                header.className = 'code-header';
+
+                const title = document.createElement('div');
+                title.className = 'code-title';
+                title.textContent = example.title;
+
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.innerHTML = '📋 Copy Code';
+                copyButton.addEventListener('click', () => this.copyToClipboard(example.code, copyButton));
+
+                header.appendChild(title);
+                header.appendChild(copyButton);
+
+                const content = document.createElement('div');
+                content.className = 'code-content';
+
+                const pre = document.createElement('pre');
+                pre.textContent = example.code;
+
+                content.appendChild(pre);
+
+                section.appendChild(header);
+                section.appendChild(content);
+
+                container.appendChild(section);
+            }
+
+            addInstallationNotes(container) {
+                const notes = this.getInstallationNotes();
+                if (notes) {
+                    const notesDiv = document.createElement('div');
+                    notesDiv.className = 'installation-notes';
+                    notesDiv.innerHTML = notes;
+                    container.appendChild(notesDiv);
+                }
+
+                const modelInfo = this.getModelInfo();
+                if (modelInfo) {
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'model-info';
+                    infoDiv.innerHTML = modelInfo;
+                    container.appendChild(infoDiv);
+                }
+
+                const errorHandling = this.getErrorHandlingInfo();
+                if (errorHandling) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-handling';
+                    errorDiv.innerHTML = errorHandling;
+                    container.appendChild(errorDiv);
+                }
+            }
+
+            getInstallationNotes() {
+                const notes = {
+                    javascript: '<strong>Installation:</strong> For Node.js, install axios: <code>npm install axios</code>',
+                    typescript: '<strong>Installation:</strong> Install TypeScript and types: <code>npm install typescript @types/node</code>',
+                    python: '<strong>Installation:</strong> Install required packages: <code>pip install requests openai anthropic</code>',
+                    java: '<strong>Installation:</strong> Add Jackson dependency for JSON parsing: <code>&lt;dependency&gt;&lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;&lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;&lt;/dependency&gt;</code>',
+                    php: '<strong>Installation:</strong> Ensure cURL extension is enabled in PHP configuration',
+                    go: '<strong>Installation:</strong> No external dependencies required, uses standard library',
+                    ruby: '<strong>Installation:</strong> Install JSON gem if not available: <code>gem install json</code>'
+                };
+
+                return notes[this.currentLanguage] || null;
+            }
+
+            getModelInfo() {
+                return `<strong>Model Information:</strong>
+                    • Claude 4.1 Opus: Most capable model, best for complex reasoning
+                    • Claude 4 Sonnet: Balanced performance and speed
+                    • Claude 3.5 Sonnet: Fast and efficient for most tasks
+                    • Claude 3.5 Haiku: Fastest model for simple tasks`;
+            }
+
+            getErrorHandlingInfo() {
+                return `<strong>Common Error Handling:</strong>
+                    • HTTP 401: Invalid API key
+                    • HTTP 429: Rate limit exceeded
+                    • HTTP 400: Invalid request format
+                    • HTTP 500: Server error, implement retry logic`;
+            }
+
+            async copyToClipboard(text, button) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '✅ Copied!';
+                    button.classList.add('copied');
+
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+
+                    button.innerHTML = '✅ Copied!';
+                    setTimeout(() => {
+                        button.innerHTML = '📋 Copy Code';
+                    }, 2000);
+                }
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            setupSeamlessNavigation();
+            new APIQuickstart();
+        });
+
+        // Handle seamless navigation back to source page
+        function setupSeamlessNavigation() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get('return');
+            const backButton = document.getElementById('back-button');
+            
+            if (returnUrl) {
+                // If we have a return URL, use it for seamless navigation
+                backButton.href = returnUrl;
+                
+                // Update button text based on return URL
+                if (returnUrl.includes('repair.html')) {
+                    backButton.innerHTML = 'Back to REPAIR Protocol';
+                } else if (returnUrl.includes('index.html')) {
+                    backButton.innerHTML = 'Back to Home';
+                } else {
+                    backButton.innerHTML = 'Back';
+                }
+            }
+            
+            // Add click handler for smooth navigation on back button
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateWithTransition(this.href);
+            });
+            
+            // Add smooth navigation to all internal nav links (exclude external links)
+            document.querySelectorAll('nav a').forEach(link => {
+                // Only apply smooth navigation to internal links
+                if (!link.href.startsWith('http://') && !link.href.startsWith('https://') || 
+                    link.href.includes(window.location.hostname)) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        navigateWithTransition(this.href);
+                    });
+                }
+            });
+        }
+        
+        // Smooth navigation transition function
+        function navigateWithTransition(url) {
+            // Show loading state on the back button if it's the one being clicked
+            const backButton = document.getElementById('back-button');
+            const originalText = backButton.textContent;
+            
+            // Add subtle loading indication
+            if (event && event.target === backButton) {
+                backButton.style.opacity = '0.7';
+                backButton.textContent = 'Loading...';
+            }
+            
+            // Use smooth transition
+            document.body.style.opacity = '0.7';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 150);
+        }
+    </script>
+</body>
+</html>
