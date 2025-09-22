@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/shadowdevnotreal/REPAIR-Protocol)
 [![License](https://img.shields.io/badge/license-GPL%20v3.0-green.svg)](LICENSE)
 [![Made with Love](https://img.shields.io/badge/made%20with-❤️-red.svg)](https://github.com/shadowdevnotreal/REPAIR-Protocol)
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://prcm-asrl.netlify.app/start_here.html)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://repairprotocol.netlify.app/)
 [![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5](https://img.shields.io/badge/html5-semantic-orange.svg)](https://html.spec.whatwg.org/multipage/)
 [![CSS3](https://img.shields.io/badge/css3-modern-blue.svg)](https://www.w3.org/Style/CSS/)
@@ -21,7 +21,7 @@
 [![GitHub Forks](https://img.shields.io/github/forks/shadowdevnotreal/REPAIR-Protocol?style=social)](https://github.com/shadowdevnotreal/REPAIR-Protocol/network)
 [![GitHub Watchers](https://img.shields.io/github/watchers/shadowdevnotreal/REPAIR-Protocol?style=social)](https://github.com/shadowdevnotreal/REPAIR-Protocol/watchers)
 
-**🚀 [Live Demo](https://prcm-asrl.netlify.app/start_here.html) | 📚 [Documentation](https://github.com/shadowdevnotreal/REPAIR-Protocol/wiki) | 🤖 [AI Coach](https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot) | 💬 [Community](https://github.com/shadowdevnotreal/REPAIR-Protocol/discussions)**
+**🚀 [Live Demo](https://repairprotocol.netlify.app/) | 📚 [Documentation](https://github.com/shadowdevnotreal/REPAIR-Protocol/wiki) | 🤖 [AI Coach](https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot) | 💬 [Community](https://github.com/shadowdevnotreal/REPAIR-Protocol/discussions)**
 
 *A comprehensive, AI-enhanced framework for authentic reconciliation and relationship restoration with advanced cognitive enhancement features. Built with modern web technologies and enhanced with AI-powered cognitive tools, it transforms the challenging journey of making amends into a structured, supportive experience.*
 
@@ -259,7 +259,7 @@ graph LR
 #### Option 1: Instant Demo Access (Recommended)
 ```bash
 # Begin your restoration journey immediately:
-🌐 Live Demo: [https://repairprotocol.netlify.app/](https://prcm-asrl.netlify.app/start_here.html)
+🌐 Live Demo: [https://repairprotocol.netlify.app/](https://repairprotocol.netlify.app/)
 🤖 AI Coach: https://chatgpt.com/g/g-685f7ec1cae4819183b514fdeff27b43-repair-protocol-support-bot
 
 # Experience the complete journey:
